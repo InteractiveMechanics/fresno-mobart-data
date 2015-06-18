@@ -1,0 +1,47 @@
+
+a svg:hover {
+	fill: #f98012;
+}
+
+
+table {
+	margin-top: 3em;
+}
+
+thead {
+	background-color: #555;
+	color: #fff;
+}
+
+td {
+	font-size: 1.2em;
+	text-align: center;
+}
+
+svg {
+	width: 20px;
+}
+
+#search-students svg {
+	width: 12px;
+	margin-right: 5px;
+}
+
+
+.btn-group {
+	float: right;
+	margin-left: 2em;
+}
+
+.placeholder {
+	height:50px;
+	width: 50px;
+	background-color: #777;
+}
+
+.footer-nav {
+	float: right;
+	text-transform: uppercase;
+}
+
+
