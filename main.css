@@ -32,6 +32,10 @@ svg {
 	margin-right: 5px;
 }
 
+#add-class-button svg {
+	width: 12px;
+	margin-right: 5px;
+}
 
 
 .btn-group {
