@@ -27,6 +27,10 @@ svg {
 	margin-right: 5px;
 }
 
+#add-project svg {
+	width: 12px;
+	margin-right: 5px;
+}
 
 .btn-group {
 	float: right;
