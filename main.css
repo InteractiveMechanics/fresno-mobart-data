@@ -46,6 +46,7 @@ svg {
 .footer-nav {
 	float: right;
 	text-transform: uppercase;
+	margin-top: 15px;
 }
 
 /* MODAL STYLES */
