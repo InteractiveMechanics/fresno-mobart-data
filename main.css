@@ -27,7 +27,7 @@ svg {
 	margin-right: 5px;
 }
 
-#add-project svg {
+#add-project-button svg {
 	width: 12px;
 	margin-right: 5px;
 }
@@ -80,3 +80,33 @@ svg {
 	margin: 15px -15px;
 }
 
+/* END MODAL STYLES */
+
+/* ADD PROJECT STYLES */
+
+#addProject h1 {
+	margin-bottom: 20px;
+}
+
+#addProject {
+	background: #efefef;
+}
+
+#addProject textarea {
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
+#addProject button[type="submit"] {
+	float: right;
+	font-size: 18px;
+}
+
+#addProject .border {
+	border-bottom: 2px solid #fff;
+}
+
+#all-projects {
+	display: inline-block;
+	margin-bottom: 10px;
+}
