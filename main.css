@@ -22,7 +22,7 @@ svg {
 	width: 20px;
 }
 
-#search-students svg {
+#search svg {
 	width: 12px;
 	margin-right: 5px;
 }
@@ -31,6 +31,8 @@ svg {
 	width: 12px;
 	margin-right: 5px;
 }
+
+
 
 .btn-group {
 	float: right;
