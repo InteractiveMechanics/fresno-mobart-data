@@ -44,4 +44,35 @@ svg {
 	text-transform: uppercase;
 }
 
+/* MODAL STYLES */
+
+#editStudentModal h4 {
+	margin-bottom: 10px;
+}
+
+.modal-uploads {
+	display: inline-block;
+}
+
+.modal-dimensions {
+	list-style-type: none;
+}
+
+.modal-dimensions select {
+	display: inline;
+	margin-left: 20px;
+}
+
+.modal-dimensions .form-control {
+	width: 10%;
+}
+
+.modal-dimensions li {
+	margin-bottom: 15px;
+}
+
+.modal-border {
+	border-bottom: 1px solid #e7e7e7;
+	margin: 15px -15px;
+}
 
