@@ -68,6 +68,7 @@ button[type="submit"] {
 	float: right;
 	text-transform: uppercase;
 	margin-top: 15px;
+	margin-bottom: 15px;
 }
 
 /* MODAL STYLES */
@@ -109,6 +110,8 @@ button[type="submit"] {
 #addProject h1 {
 	margin-bottom: 20px;
 }
+
+
 
 #addProject {
 	background: #efefef;
