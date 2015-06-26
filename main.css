@@ -22,31 +22,31 @@ svg {
 	width: 20px;
 }
 
-#search svg {
+a svg {
 	width: 12px;
 	margin-right: 5px;
 }
-
-#add-project-button svg {
-	width: 12px;
-	margin-right: 5px;
-}
-
-#add-class-button svg {
-	width: 12px;
-	margin-right: 5px;
-}
-
 
 .btn-group {
 	float: right;
 	margin-left: 2em;
 }
 
+button[type="submit"] {
+	float: right;
+	font-size: 18px;
+	margin-top: 15px;
+}
+
 .placeholder {
 	height:50px;
 	width: 50px;
 	background-color: #777;
+}
+
+.border {
+	border-bottom: 2px solid #fff;
+	margin: 15px 0;
 }
 
 .footer-nav {
@@ -104,16 +104,25 @@ svg {
 	margin-bottom: 15px;
 }
 
-#addProject button[type="submit"] {
-	float: right;
-	font-size: 18px;
-}
-
-#addProject .border {
-	border-bottom: 2px solid #fff;
-}
 
 #all-projects {
 	display: inline-block;
 	margin-bottom: 10px;
+}
+
+/* END PROJECT STYLES */
+
+/* ADD CLASS STYLES */
+
+#addClass {
+	background: #efefef;
+}
+
+#addClass label {
+	margin-top: 15px;
+}
+
+#add-student-button {
+	float: right;
+	margin-top: 15px;
 }
