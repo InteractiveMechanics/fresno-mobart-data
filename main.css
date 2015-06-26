@@ -1,4 +1,12 @@
 
+a {
+	color: #000;
+}
+
+a:hover {
+	color: #f98012;
+}
+
 a svg:hover {
 	fill: #f98012;
 }
@@ -9,20 +17,22 @@ table {
 }
 
 thead {
-	background-color: #555;
+	background-color: #999;
 	color: #fff;
 }
 
-td {
-	font-size: 1.2em;
+td, th {
+	font-size: 1.1em;
 	text-align: center;
+	font-weight: 400;
 }
 
 svg {
 	width: 20px;
+	fill: #333;
 }
 
-a svg {
+.btn svg {
 	width: 12px;
 	margin-right: 5px;
 }
@@ -42,6 +52,11 @@ button[type="submit"] {
 	height:50px;
 	width: 50px;
 	background-color: #777;
+	margin-left: 25%;
+}
+
+.form-group .placeholder {
+	margin-left: 10px;
 }
 
 .border {
