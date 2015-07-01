@@ -1,27 +1,35 @@
-var mobart = angular.module('mobart', ['ngRoute', 'appControllers', 'ngFileUpload']);
+var mobart = angular.module('mobart', ['ngRoute', 'appControllers', 'ngFileUpload', 'ui.bootstrap']);
 var appControllers = angular.module('appControllers', []);
 
 mobart.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
     $routeProvider
         .when('/', {
-            templateUrl: 'views/all-grades.html',
+            templateUrl: 'js/views/grades/all-grades.html',
             controller: 'AllGradesController'
         })
         .when('/classes', {
-            templateUrl: 'views/all-classes.html',
+            templateUrl: 'js/views/classes/all-classes.html',
             controller: 'AllClassesController'
         })
         .when('/classes/add', {
-            templateUrl: 'views/class-details.html',
+            templateUrl: 'js/views/classes/class-details.html',
             controller: 'AddClassController'
         })
         .when('/classes/edit', {
-            templateUrl: 'views/class-details.html',
+            templateUrl: 'js/views/classes/class-details.html',
             controller: 'EditClassController'
         })
         .when('/projects', {
-            templateUrl: 'views/all-projects.html',
+            templateUrl: 'js/views/projects/all-projects.html',
             controller: 'AllProjectsController'
+        })
+        .when('/projects/add', {
+            templateUrl: 'js/views/projects/project-details.html',
+            controller: 'AddProjectController'
+        })
+        .when('/projects/edit', {
+            templateUrl: 'js/views/projects/project-details.html',
+            controller: 'EditProjectController'
         })
         .otherwise({
             redirectTo: '/'
