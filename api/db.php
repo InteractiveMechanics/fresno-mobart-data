@@ -1,6 +1,6 @@
 <?php
 function getDB() {
-    $dbhost = "localhost";
+    $dbhost = "70.32.112.236";
     $dbuser = "staging_mobart";
     $dbpass = "Qv4ub2*1";
     $dbname = "staging_mobart";

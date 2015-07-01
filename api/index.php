@@ -31,7 +31,9 @@
     function getClasses() {
         $sql = '
             SELECT * 
-            FROM mobart_class 
+            FROM mobart_class, mobart_student, mobart_project_grade 
+            WHERE mobart_class.id = mobart_student.cid 
+            AND mobart_student.id = mobart_project_grade.sid 
             ORDER BY mobart_class.id DESC';
         try {
             $db     = getDB();
@@ -47,9 +49,10 @@
     function getClassById($cid) {
         $sql = '
             SELECT * 
-            FROM mobart_class, mobart_student 
+            FROM mobart_class, mobart_student, mobart_project_grade 
             WHERE mobart_class.id = ' . $cid . ' 
             AND mobart_student.cid = ' . $cid . ' 
+            AND mobart_student.id = mobart_project_grade.sid 
             ORDER BY mobart_class.id DESC';
         try {
             $db     = getDB();
