@@ -7,34 +7,112 @@
     $app = new \Slim\Slim();
     $app->config('debug', true);
 
-    $app->get('/class', getClasses);    
-    $app->get('/class/:cid', getClassById);
-    $app->get('/project/', getProjects);
-    $app->get('/project/:pid', getProjectById);
-    $app->get('/file/:fid', getFileById);
+    $app->get('/grades', getGrades);
+    $app->get('/grades/:gid', getGradeById);
+    $app->get('/classes', getClasses);
+    $app->get('/classes/:cid', getClassById);
+    $app->get('/classes/:cid/students', getStudentsFromClass);
+    $app->get('/projects/', getProjects);
+    $app->get('/projects/:pid', getProjectById);
+    $app->get('/files/:fid', getFileById);
 
-    $app->post('/class', postClass);
-    $app->post('/student', postStudent);
-    $app->post('/project', postProject);
-    $app->post('/file', postFile);
+    $app->post('/classes', postClass);
+    $app->post('/students', postStudent);
+    $app->post('/projects', postProject);
+    $app->post('/files', postFile);
 
-    $app->put('/class/:cid', updateClass);
-    $app->put('/project/:pid', updateProject);
+    $app->put('/classes/:cid', updateClass);
+    $app->put('/projects/:pid', updateProject);
 
-    $app->delete('/class/:cid', deleteClass);
-    $app->delete('/class/:sid', deleteStudent);
-    $app->delete('/class/:pid', deleteProject);
+    $app->delete('/classes/:cid', deleteClass);
+    $app->delete('/students/:sid', deleteStudent);
+    $app->delete('/projects/:pid', deleteProject);
 
     $app->run();
 
-
+    function getGrades() {
+        $sql = '
+            SELECT
+                mobart_project_grade.id,
+                mobart_student.cid, 
+                mobart_class.classname, 
+                mobart_class.classtype, 
+                mobart_class.tid,
+                mobart_student.firstname, 
+                mobart_student.lastname, 
+                mobart_project_grade.ex1grade, 
+                mobart_project_grade.ex2grade, 
+                mobart_project_grade.ex3grade, 
+                mobart_project_grade.ex4grade
+            FROM 
+                mobart_class, 
+                mobart_student, 
+                mobart_project_grade 
+            WHERE 
+                mobart_class.id = mobart_student.cid 
+            AND 
+                mobart_student.id = mobart_project_grade.sid 
+            ORDER BY 
+                mobart_class.id DESC';
+        try {
+            $db     = getDB();
+            $query  = $db->query($sql);
+            $tours  = $query->fetchAll(PDO::FETCH_OBJ);
+            $db     = null;
+    
+            echo json_encode($tours);
+        } catch(PDOException $e) {
+            echo json_encode($e->getMessage());
+        }
+    }
+    function getGradeById($gid) {
+        $sql = '
+            SELECT 
+                mobart_project_grade.id,
+                mobart_class.classname, 
+                mobart_class.classtype, 
+                mobart_student.firstname, 
+                mobart_student.lastname, 
+                mobart_project_grade.ex1grade, 
+                mobart_project_grade.ex2grade, 
+                mobart_project_grade.ex3grade, 
+                mobart_project_grade.ex4grade 
+            FROM 
+                mobart_class, 
+                mobart_student, 
+                mobart_project_grade
+            WHERE 
+                mobart_project_grade.id = ' . $gid . ' 
+            AND 
+                mobart_project_grade.sid = mobart_student.id 
+            ORDER BY 
+                mobart_class.id DESC
+            LIMIT 1';
+        try {
+            $db     = getDB();
+            $query  = $db->query($sql);
+            $tour   = $query->fetchAll(PDO::FETCH_OBJ);
+            $db     = null;
+    
+            echo json_encode($tour);
+        } catch(PDOException $e) {
+            echo json_encode($e->getMessage());
+        }
+    }
     function getClasses() {
         $sql = '
-            SELECT * 
-            FROM mobart_class, mobart_student, mobart_project_grade 
-            WHERE mobart_class.id = mobart_student.cid 
-            AND mobart_student.id = mobart_project_grade.sid 
-            ORDER BY mobart_class.id DESC';
+            SELECT
+                mobart_class.id,
+                mobart_class.classname,
+                mobart_class.classtype,
+                mobart_class.room,
+                mobart_class.tid,
+                mobart_project.name
+            FROM 
+                mobart_class,
+                mobart_project
+            ORDER BY 
+                mobart_class.id DESC';
         try {
             $db     = getDB();
             $query  = $db->query($sql);
@@ -48,12 +126,47 @@
     }
     function getClassById($cid) {
         $sql = '
-            SELECT * 
-            FROM mobart_class, mobart_student, mobart_project_grade 
-            WHERE mobart_class.id = ' . $cid . ' 
-            AND mobart_student.cid = ' . $cid . ' 
-            AND mobart_student.id = mobart_project_grade.sid 
-            ORDER BY mobart_class.id DESC';
+            SELECT
+                mobart_class.id,
+                mobart_class.classname,
+                mobart_class.classtype,
+                mobart_class.room,
+                mobart_class.tid,
+                mobart_project.name                
+            FROM 
+                mobart_class,
+                mobart_project
+            WHERE
+                mobart_class.id = ' . $cid . '
+            ORDER BY 
+                mobart_class.id DESC';
+        try {
+            $db     = getDB();
+            $query  = $db->query($sql);
+            $tours  = $query->fetchAll(PDO::FETCH_OBJ);
+            $db     = null;
+    
+            echo json_encode($tours);
+        } catch(PDOException $e) {
+            echo json_encode($e->getMessage());
+        }
+    }
+    function getStudentsFromClass($cid) {
+        $sql = '
+            SELECT
+                mobart_student.id,
+                mobart_student.cid,
+                mobart_student.firstname,
+                mobart_student.lastname
+            FROM 
+                mobart_class, 
+                mobart_student 
+            WHERE 
+                mobart_class.id = ' . $cid . ' 
+            AND 
+                mobart_student.cid = ' . $cid . ' 
+            ORDER BY 
+                mobart_class.id DESC';
         try {
             $db     = getDB();
             $query  = $db->query($sql);
@@ -67,9 +180,13 @@
     }
     function getProjects() {
         $sql = '
-            SELECT * 
-            FROM mobart_project 
-            ORDER BY mobart_project.id DESC';
+            SELECT
+                mobart_project.id,
+                mobart_project.name
+            FROM 
+                mobart_project 
+            ORDER BY 
+                mobart_project.id DESC';
         try {
             $db     = getDB();
             $query  = $db->query($sql);
@@ -84,10 +201,15 @@
     function getProjectById($pid) {
         $sql = '
             SELECT * 
-            FROM mobart_project, mobart_dimension 
-            WHERE mobart_project.id = ' . $pid . ' 
-            AND mobart_dimension.pid = ' . $pid . ' 
-            ORDER BY mobart_project.id DESC';
+            FROM 
+                mobart_project, 
+                mobart_dimension 
+            WHERE 
+                mobart_project.id = ' . $pid . ' 
+            AND 
+                mobart_dimension.pid = ' . $pid . ' 
+            ORDER BY 
+                mobart_project.id DESC';
         try {
             $db     = getDB();
             $query  = $db->query($sql);

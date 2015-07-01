@@ -1,0 +1,97 @@
+<section id="addClass">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+                <header>
+                    <h1>Class Details</h1><a class="btn btn-default" id="all-projects" href="/data/classes" role="button">Back to all classes</a>
+    
+                    <div class="border"></div>
+                </header>
+            </div><!-- end col-sm-10 col-sm-offset-1 -->
+        </div><!-- end row -->
+        <!-- FORM STARTS HERE -->
+    
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+                <h3>About the Class</h3>
+            </div><!-- end col-sm-10 col-sm-offset-1 -->
+    
+            <form>
+                <div class="col-sm-6 col-sm-offset-1">
+                    <div class="form-group">
+                        <label for="class-name">Class Name</label> <input type="email" class="form-control" id="class-name" placeholder="Name Your Class">
+                    </div>
+                </div><!-- end col-sm-8 -->
+    
+                <div class="col-sm-3 col-sm-offset-1">
+                    <div class="form-group">
+                        <label for="room">Room</label> <input type="email" class="form-control" id="room" placeholder="Room Number">
+                    </div>
+                </div><!-- end col-sm-3 col-sm-offset-1 -->
+            </form>
+        </div><!-- end row -->
+    
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+                <label for="teachers">Teachers</label>
+                <select class="form-control" id="teachers">
+                    <option>0</option>
+                </select>
+
+                <label for="projects">Project</label>
+                <select class="form-control" id="projects">
+                    <option>0</option>
+                </select>
+                <a href="addProject.html">Add a Project</a>
+    
+                <div class="border"></div>
+    
+                <h3>Students</h3>
+            </div><!-- end col-sm-10 col-sm-offset-1 -->
+        </div><!-- end row -->
+    
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+    
+                            <th>First Name</th>
+    
+                            <th>Last Name</th>
+    
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+    
+                    <tr>
+                        <td>1919</td>
+    
+                        <td>Jeb</td>
+    
+                        <td>Bush</td>
+    
+                        <td class="delete"><a href="" data-toggle="modal" data-target="#myModal"></a></td>
+                    </tr>
+    
+                    <tr>
+                        <td>2016</td>
+    
+                        <td>Hillary</td>
+    
+                        <td>Clinton</td>
+    
+                        <td class="delete"><a href="" data-toggle="modal" data-target="#myModal"></a></td>
+                    </tr>
+                </table><a class="btn btn-default" href="index.html" role="button" id="add-student-button"> Add a Student</a>
+    
+                <div class="border"></div>
+            </div>
+    
+            <div class="col-sm-10 col-sm-offset-1">
+                <button type="submit" class="btn btn-default">Save</button>
+            </div>
+        </div>
+    </div>
+</section>

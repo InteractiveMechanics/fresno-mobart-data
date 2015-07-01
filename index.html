@@ -19,9 +19,34 @@
     <script src="js/lib/ngFileUpload/ng-file-upload.min.js"></script>
 
     <script src="js/app.js"></script>
-    <script src="js/controllers/all-students.js"></script>
+    <script src="js/filters.js"></script>
+    <script src="js/controllers/all-grades.js"></script>
+    <script src="js/controllers/all-classes.js"></script>
+    <script src="js/controllers/all-projects.js"></script>
+
+    <script src="js/controllers/add-class.js"></script>
+    <script src="js/controllers/edit-class.js"></script>
 </head>
 <body>
     <main ng-view></main>
+    <div class="container">
+        <div class="footer-nav">
+            <a href="/data/">Grades</a> | <a href="/data/projects">Projects</a> | <a href="/data/classes">Classes</a>
+        </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h5>Are you sure you would like to delete this record?</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button> <button type="button" class="btn btn-primary">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div><!-- End Delete Modal -->
 </body>
 </html>
