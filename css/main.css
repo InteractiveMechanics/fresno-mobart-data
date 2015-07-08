@@ -11,6 +11,9 @@ a svg:hover {
 	fill: #f98012;
 }
 
+nav {
+    margin-top: 20px;
+}
 
 table {
 	margin-top: 3em;
@@ -36,12 +39,6 @@ svg {
 	width: 12px;
 	margin-right: 5px;
 }
-
-.btn-group {
-	float: right;
-	margin-left: 2em;
-}
-
 button[type="submit"] {
 	float: right;
 	font-size: 18px;

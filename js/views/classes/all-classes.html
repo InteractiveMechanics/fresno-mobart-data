@@ -1,43 +1,44 @@
 <div class="container">
-    <div class="row">
-        <header>
-            <h1>Classes</h1>
+    <header>
+        <div class="row">
+            <div class="col-sm-12">
+                <h1 class="pull-left">Classes</h1>
 
-            <nav>
-                <a class="btn btn-default" id="add-class-button" href="/data/classes/add" role="button"> Add a Class</a>
-                <div class="btn-group" role="group" aria-label="classes">
-                    <button type="button" class="btn btn-default" ng-click="classTypeFilter = ''">All Classes</button>
-                    <button type="button" class="btn btn-default" ng-click="classTypeFilter = {classtype: 'Visual Art'}">Visual Arts</button>
-                    <button type="button" class="btn btn-default" ng-click="classTypeFilter = {classtype: 'Theatre'}">Theatre</button>
-                </div><!-- end classes button-group -->
-            </nav>
-        </header>
-    </div><!-- end row -->
-    <!-- TABLE STARTS HERE -->
+                <nav class="pull-right">
+                    <div class="form-inline">
+                        <a class="btn btn-primary" id="add-class-button" href="/data/classes/add" role="button"> Add a Class</a>
+                        <div class="btn-group" role="group" aria-label="classes">
+                            <button type="button" class="btn btn-default" ng-click="classTypeFilter = ''">All Classes</button>
+                            <button type="button" class="btn btn-default" ng-click="classTypeFilter = {classtype: 'Visual Art'}">Visual Arts</button>
+                            <button type="button" class="btn btn-default" ng-click="classTypeFilter = {classtype: 'Theatre'}">Theatre</button>
+                        </div><!-- end classes button-group -->
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
 
-    <div class="row">
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Class</th>
-                        <th>Teacher</th>
-                        <th>Project</th>
-                        <th>Room Number</th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-
-                <tr ng-repeat="class in classes | filter:classTypeFilter">
-                    <td class="class-name">{{ class.classname }}</td>
-                    <td class="teacher">{{ class.tid }}</td>
-                    <td class="project-name">{{ class.name }}</td>
-                    <td class="room number">{{ class.room }}</td>
-                    <td class="edit"><a href="/data/classes/edit"><span class="glyphicon glyphicon-pencil"></span></a></td>
-                    <td class="delete"><a ng-click="deleteModal()"><span class="glyphicon glyphicon-trash"></span></a></td>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Class</th>
+                    <th>Teacher</th>
+                    <th>Project</th>
+                    <th>Room Number</th>
+                    <th></th>
+                    <th></th>
                 </tr>
-            </table>
-        </div><!-- end table-responsive -->
-    </div><!-- end row -->
+            </thead>
+
+            <tr ng-repeat="class in classes | filter:classTypeFilter">
+                <td class="class-name">{{ class.classname }}</td>
+                <td class="teacher">{{ class.tid }}</td>
+                <td class="project-name">{{ class.name }}</td>
+                <td class="room number">{{ class.room }}</td>
+                <td class="edit"><a href="/data/classes/edit"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                <td class="delete"><a ng-click="deleteModal(class)"><span class="glyphicon glyphicon-trash"></span></a></td>
+            </tr>
+        </table>
+    </div><!-- end table-responsive -->
 </div><!-- end container -->

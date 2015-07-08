@@ -16,16 +16,12 @@
     $app->get('/projects/:pid', getProjectById);
     $app->get('/files/:fid', getFileById);
 
-    $app->post('/classes', postClass);
-    $app->post('/students', postStudent);
-    $app->post('/projects', postProject);
     $app->post('/files', postFile);
 
-    $app->put('/classes/:cid', updateClass);
-    $app->put('/projects/:pid', updateProject);
+    $app->put('/grades/:gid', updateGrade);
 
+    $app->delete('/grades/:gid', deleteGrade);
     $app->delete('/classes/:cid', deleteClass);
-    $app->delete('/students/:sid', deleteStudent);
     $app->delete('/projects/:pid', deleteProject);
 
     $app->run();
@@ -223,9 +219,14 @@
     }
     function getFileById($fid) {
         $sql = '
-            SELECT * 
-            FROM mobart_file 
-            WHERE id = ' . $fid;
+            SELECT 
+                filename,
+                filepath,
+                mimetype
+            FROM 
+                mobart_file 
+            WHERE 
+                id = ' . $fid;
         try {
             $db     = getDB();
             $query  = $db->query($sql);
@@ -239,72 +240,6 @@
     }
 
 
-    function postClass() {
-        global $app;
-
-        $req    = json_decode($app->request->getBody());
-        $vars   = get_object_vars($req);
-     
-        $sql = '
-            INSERT INTO mobart_class (`classname`, `room`, `tid`, `pid`, `classtype`) 
-            VALUES (:classname, :room, :tid, :pid, :classtype)';
-        try {
-            $db = getDB();
-            $stmt = $db->prepare($sql);  
-            $stmt->bindParam('classname', $vars['classname']);
-            $stmt->bindParam('room', $vars['room']);
-            $stmt->bindParam('tid', $vars['tid']);
-            $stmt->bindParam('pid', $vars['pid']);
-            $stmt->bindParam('classtype', $vars['classtype']);
-            $stmt->execute();
-
-            $db = null;
-        } catch(PDOException $e) {
-            echo json_encode($e->getMessage()); 
-        }
-    }
-    function postStudent() {
-        global $app;
-
-        $req    = json_decode($app->request->getBody());
-        $vars   = get_object_vars($req);
-     
-        $sql = '
-            INSERT INTO mobart_student (`firstname`, `lastname`, `cid`) 
-            VALUES (:firstname, :lastname, :cid)';
-        try {
-            $db = getDB();
-            $stmt = $db->prepare($sql);  
-            $stmt->bindParam('firstname', $vars['firstname']);
-            $stmt->bindParam('lastname', $vars['lastname']);
-            $stmt->bindParam('cid', $vars['cid']);
-            $stmt->execute();
-
-            $db = null;
-        } catch(PDOException $e) {
-            echo json_encode($e->getMessage()); 
-        }
-    }
-    function postProject() {
-        global $app;
-
-        $req    = json_decode($app->request->getBody());
-        $vars   = get_object_vars($req);
-     
-        $sql = '
-            INSERT INTO mobart_project (`name`) 
-            VALUES (:name)';
-        try {
-            $db = getDB();
-            $stmt = $db->prepare($sql);  
-            $stmt->bindParam('name', $vars['name']);
-            $stmt->execute();
-
-            $db = null;
-        } catch(PDOException $e) {
-            echo json_encode($e->getMessage()); 
-        }
-    }
     function postFile() {
         global $app;
 
@@ -312,14 +247,15 @@
         $vars   = get_object_vars($req);
      
         $sql = '
-            INSERT INTO mobart_file (`filename`, `filepath`, `mimetype`) 
-            VALUES (:filename, :filepath, :mimetype)';
+            INSERT INTO 
+                mobart_file (`filename`, `filepath`, `mimetype`) 
+            VALUES 
+                (:filename, "/data/files/", :mimetype)';
         try {
             $db = getDB();
             $stmt = $db->prepare($sql);  
-            $stmt->bindParam('filename', $vars['filename']);
-            $stmt->bindParam('filepath', $vars['filepath']);
-            $stmt->bindParam('mimetype', $vars['mimetype']);
+            $stmt->bindParam('filename', $vars['name']);
+            $stmt->bindParam('mimetype', $vars['type']);
             $stmt->execute();
 
             $db = null;
@@ -329,51 +265,27 @@
     }
 
 
-    function updateClass($cid) {
+    function updateGrade($gid) {
         global $app;
 
         $req    = json_decode($app->request->getBody());
         $vars   = get_object_vars($req);
      
         $sql = '
-            UPDATE mobart_class 
-            SET classname = :classname, 
-                room = :room, 
-                tid = :tid, 
-                pid = :pid, 
-                classtype = :classtype 
-            WHERE id = :cid';
+            UPDATE mobart_project_grade
+            SET ex1grade = :ex1grade, 
+                ex2grade = :ex2grade, 
+                ex3grade = :ex3grade, 
+                ex4grade = :ex4grade
+            WHERE id = :gid';
         try {
             $db = getDB();
             $stmt = $db->prepare($sql);
-            $stmt->bindParam('cid', $cid);
-            $stmt->bindParam('classname', $vars['classname']);
-            $stmt->bindParam('room', $vars['room']);
-            $stmt->bindParam('tid', $vars['tid']);
-            $stmt->bindParam('pid', $vars['pid']);
-            $stmt->bindParam('classtype', $vars['classtype']);
-            $stmt->execute();
-
-            $db = null;
-        } catch(PDOException $e) {
-            echo json_encode($e->getMessage()); 
-        }
-    }
-    function updateProject($pid) {
-        global $app;
-
-        $req    = json_decode($app->request->getBody());
-        $vars   = get_object_vars($req);
-     
-        $sql = '
-            UPDATE mobart_project 
-            SET name = :name 
-            WHERE id = :pid';
-        try {
-            $db = getDB();
-            $stmt = $db->prepare($sql);
-            $stmt->bindParam('pid', $pid);
-            $stmt->bindParam('name', $vars['name']);
+            $stmt->bindParam('gid', $gid);
+            $stmt->bindParam('ex1grade', $vars['ex1grade']);
+            $stmt->bindParam('ex2grade', $vars['ex2grade']);
+            $stmt->bindParam('ex3grade', $vars['ex3grade']);
+            $stmt->bindParam('ex4grade', $vars['ex4grade']);
             $stmt->execute();
 
             $db = null;
@@ -383,14 +295,14 @@
     }
 
 
-    function deleteClass($cid) {
+    function deleteGrade($gid) {
         $sql = '
-            DELETE FROM mobart_class 
-            WHERE id = :cid';
+            DELETE FROM mobart_project_grade 
+            WHERE id = :gid';
         try {
             $db = getDB();
             $stmt = $db->prepare($sql);  
-            $stmt->bindParam('cid', $sid);
+            $stmt->bindParam('gid', $gid);
             $stmt->execute();
 
             $db = null;
@@ -398,14 +310,14 @@
             echo json_encode($e->getMessage());
         }
     }
-    function deleteStudent($sid) {
+    function deleteClass($cid) {
         $sql = '
-            DELETE FROM mobart_student 
-            WHERE id = :sid';
+            DELETE FROM mobart_class 
+            WHERE id = :cid';
         try {
             $db = getDB();
             $stmt = $db->prepare($sql);  
-            $stmt->bindParam('sid', $sid);
+            $stmt->bindParam('cid', $cid);
             $stmt->execute();
 
             $db = null;
@@ -419,8 +331,8 @@
             WHERE id = :pid';
         try {
             $db = getDB();
-            $stmt = $db->prepare($sql);  
-            $stmt->bindParam('pid', $sid);
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam('pid', $pid);
             $stmt->execute();
 
             $db = null;

@@ -1,26 +1,27 @@
 <div class="modal-content">
     <div class="modal-header">
         <button type="button" class="close" ng-click="cancel()"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="editStudentModalLabel">Edit a Student: [Name], [Class Title]</h4>
+        <h4 class="modal-title" id="editStudentModalLabel">{{ record.firstname }} {{ record.lastname }}'s Grade for {{ record.classname }}</h4>
     </div>
 
     <div class="modal-body">
-        <h4>Upload the files</h4>
-
-        <div class="modal-uploads">
-            <div class="placeholder"></div>
-            <div class="form-group">
-                <label for="exampleInputFile">Artwork</label> <input type="file" id="exampleInputFile">
-                <p class="help-block">Upload the student's artwork.</p>
+        <h4>Upload files</h4>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="placeholder"></div>
+                <div class="form-group" ng-controller="FileUploadController">
+                    <button ngf-select ngf-change="upload($files)" class="btn btn-default">Upload Artwork</button>
+                    <p class="help-block">Upload the student's artwork.</p>
+                </div>
             </div>
-        </div>
-
-        <div class="modal-uploads">
-            <div class="placeholder"></div>
-            <div class="form-group">
-                <label for="exampleInputFile">Writing Sample</label> <input type="file" id="exampleInputFile">
-                <p class="help-block">Upload the student's writing sample.</p>
-            </div><!-- end form-group -->
+    
+            <div class="col-sm-6">
+                <div class="placeholder"></div>
+                <div class="form-group">
+                    <label for="exampleInputFile">Writing Sample</label> <input type="file" id="exampleInputFile">
+                    <p class="help-block">Upload the student's writing sample.</p>
+                </div><!-- end form-group -->
+            </div>
         </div>
 
         <div>
@@ -29,38 +30,16 @@
             <h4>Score the Dimensions</h4>
 
             <ul class="modal-dimensions">
-                <li>Dimension 1 <select class="form-control">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                </select></li>
-
-                <li>Dimension 2 <select class="form-control">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                </select></li>
-
-                <li>Dimension 3 <select class="form-control">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                </select></li>
-
-                <li>Dimension 4 <select class="form-control">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                </select></li>
+                <li>Dimension 1 <select class="form-control" ng-model="record.ex1grade" ng-options="options for options in options"></select></li>
+                <li>Dimension 2 <select class="form-control" ng-model="record.ex2grade" ng-options="options for options in options"></select></li>
+                <li>Dimension 3 <select class="form-control" ng-model="record.ex3grade" ng-options="options for options in options"></select></li>
+                <li>Dimension 4 <select class="form-control" ng-model="record.ex4grade" ng-options="options for options in options"></select></li>
             </ul>
         </div>
 
         <div class="modal-footer">
-            <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button> <button type="button" class="btn btn-primary" ng-click="save()">Save</button>
+            <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button> 
+            <button type="button" class="btn btn-primary" ng-click="save(record)">Save</button>
         </div>
     </div>
 </div>

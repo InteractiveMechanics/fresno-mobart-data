@@ -1,59 +1,60 @@
 <div class="container">
-    <div class="row">
-        <header>
-            <h1>Grades</h1>
+    <header>
+        <div class="row">
+            <div class="col-sm-12">
+                <h1 class="pull-left">Grades</h1>
+                <nav class="pull-right">
+                    <div class="form-inline">
+                        <input ng-model="search.$" class="form-control" role="search" placeholder="Search students">
+                        <div class="btn-group" role="group">
+                            <label class="btn btn-default" ng-model="search.tid" btn-radio="''">All Students</label>
+                            <label class="btn btn-default" ng-model="search.tid" btn-radio="{{ currentUserId }}">My Students</label>
+                        </div><!-- end my student button-group -->
+        
+                        <div class="btn-group" role="group">
+                            <label class="btn btn-default" ng-model="search.classtype" btn-radio="''">All Classes</label>
+                            <label class="btn btn-default" ng-model="search.classtype" btn-radio="'Visual Art'">Visual Art</label>
+                            <label class="btn btn-default" ng-model="search.classtype" btn-radio="'Theatre'">Theatre</label>
+                        </div><!-- end classes button-group -->
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
 
-            <nav>
-                <input ng-model="search" class="form-control" role="search" placeholder="Search students">
-                <div class="btn-group" role="group" aria-label="students">
-                    <button type="button" class="btn btn-default" ng-click="teacherFilter = ''">All Students</button>
-                    <button type="button" class="btn btn-default" ng-click="teacherFilter = {tid: 0}">My Students</button>
-                </div><!-- end my student button-group -->
-
-                <div class="btn-group" role="group" aria-label="classes">
-                    <button type="button" class="btn btn-default" ng-click="classTypeFilter = ''">All Classes</button>
-                    <button type="button" class="btn btn-default" ng-click="classTypeFilter = {classtype: 'Visual Art'}">Visual Arts</button>
-                    <button type="button" class="btn btn-default" ng-click="classTypeFilter = {classtype: 'Theatre'}">Theatre</button>
-                </div><!-- end classes button-group -->
-            </nav>
-        </header>
-    </div><!-- end row -->
-
-    <div class="row">
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Student Name</th>
-                        <th>Artwork</th>
-                        <th>Writing Sample</th>
-                        <th>Dimension 1</th>
-                        <th>Dimension 2</th>
-                        <th>Dimension 3</th>
-                        <th>Dimension 4</th>
-                        <th>Total</th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-
-                <tr ng-repeat="student in grades | filter:search | filter:classTypeFilter | filter:teacherFilter" data-gid="{{ student.id }}">
-                    <td class="student-name">{{ student.firstname + " " + student.lastname }}</td>
-                    <td class="artwork">
-                        <div class="placeholder"></div>
-                    </td>
-                    <td class="writing-sample">
-                        <div class="placeholder"></div>
-                    </td>
-                    <td class="dimension">{{ student.ex1grade }}</td>
-                    <td class="dimension">{{ student.ex2grade }}</td>
-                    <td class="dimension">{{ student.ex3grade }}</td>
-                    <td class="dimension">{{ student.ex4grade }}</td>
-                    <td class="total">{{ total(student.ex1grade, student.ex2grade, student.ex3grade, student.ex4grade) }}</td>
-                    <td class="edit"><a ng-click="editModal()"><span class="glyphicon glyphicon-pencil"></span></a></td>
-                    <td class="delete"><a ng-click="deleteModal()"><span class="glyphicon glyphicon-trash"></span></a></td>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Artwork</th>
+                    <th>Writing Sample</th>
+                    <th>Dimension 1</th>
+                    <th>Dimension 2</th>
+                    <th>Dimension 3</th>
+                    <th>Dimension 4</th>
+                    <th>Total</th>
+                    <th></th>
+                    <th></th>
                 </tr>
-            </table>
-        </div><!-- end table-responsive -->
-    </div><!-- end row -->
+            </thead>
+
+            <tr ng-repeat="student in grades | filter:search:strict" data-gid="{{ student.id }}">
+                <td class="student-name">{{ student.firstname + " " + student.lastname }}</td>
+                <td class="artwork">
+                    <div class="placeholder"></div>
+                </td>
+                <td class="writing-sample">
+                    <div class="placeholder"></div>
+                </td>
+                <td class="dimension">{{ student.ex1grade }}</td>
+                <td class="dimension">{{ student.ex2grade }}</td>
+                <td class="dimension">{{ student.ex3grade }}</td>
+                <td class="dimension">{{ student.ex4grade }}</td>
+                <td class="total">{{ total(student.ex1grade, student.ex2grade, student.ex3grade, student.ex4grade) }}</td>
+                <td class="edit"><a ng-click="editModal(student)"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                <td class="delete"><a ng-click="deleteModal(student)"><span class="glyphicon glyphicon-trash"></span></a></td>
+            </tr>
+        </table>
+    </div><!-- end table-responsive -->
 </div><!-- end container -->
