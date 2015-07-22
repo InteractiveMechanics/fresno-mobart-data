@@ -1,10 +1,9 @@
 <section id="addClass">
     <div class="container">
         <div class="row">
-            <div class="col-sm-10 col-sm-offset-1">
+            <div class="col-sm-12">
                 <header>
-                    <h1>Class Details</h1><a class="btn btn-default" id="all-projects" href="/data/classes" role="button">Back to all classes</a>
-    
+                    <h1>Class Details</h1>    
                     <div class="border"></div>
                 </header>
             </div><!-- end col-sm-10 col-sm-offset-1 -->
@@ -12,85 +11,79 @@
         <!-- FORM STARTS HERE -->
     
         <div class="row">
-            <div class="col-sm-10 col-sm-offset-1">
+            <div class="col-sm-12">
                 <h3>About the Class</h3>
             </div><!-- end col-sm-10 col-sm-offset-1 -->
     
             <form>
-                <div class="col-sm-6 col-sm-offset-1">
+                <div class="col-sm-7">
                     <div class="form-group">
-                        <label for="class-name">Class Name</label> <input type="email" class="form-control" id="class-name" placeholder="Name Your Class">
+                        <label for="class-name">Class Name</label>
+                        <input type="text" class="form-control" ng-model="classDetails[0].classname" />
                     </div>
                 </div><!-- end col-sm-8 -->
     
-                <div class="col-sm-3 col-sm-offset-1">
+                <div class="col-sm-4 col-sm-offset-1">
                     <div class="form-group">
-                        <label for="room">Room</label> <input type="email" class="form-control" id="room" placeholder="Room Number">
+                        <label for="room">Room</label>
+                        <input type="text" class="form-control" ng-model="classDetails[0].room" />
                     </div>
                 </div><!-- end col-sm-3 col-sm-offset-1 -->
             </form>
         </div><!-- end row -->
     
         <div class="row">
-            <div class="col-sm-10 col-sm-offset-1">
-                <label for="teachers">Teachers</label>
-                <select class="form-control" id="teachers">
-                    <option>0</option>
+            <div class="col-sm-4">
+                <label>Class Type</label>
+                <select class="form-control" ng-model="classDetails[0].classtype">
+                    <option value="Theatre">Theatre</option>
+                    <option value="Visual Arts">Visual Art</option>
                 </select>
 
-                <label for="projects">Project</label>
-                <select class="form-control" id="projects">
-                    <option>0</option>
+            </div>
+            <div class="col-sm-4">
+                <label>Teacher</label>
+                <select class="form-control" ng-model="classDetails[0].tid">
+                    <option value="0">Root user</option>
                 </select>
-                <a href="addProject.html">Add a Project</a>
-    
-                <div class="border"></div>
-    
-                <h3>Students</h3>
+
+            </div>
+            <div class="col-sm-4">
+                <label>Project</label> <a href="/data/projects/add">Add a Project</a>
+                <select class="form-control" ng-model="classDetails[0].pid" ng-options="project.id as project.name for project in projects"></select>
+                
             </div><!-- end col-sm-10 col-sm-offset-1 -->
         </div><!-- end row -->
     
-        <div class="row">
-            <div class="col-sm-10 col-sm-offset-1">
+        <div class="row" ng-show="editable">
+            <div class="col-sm-12">
+                <div class="border"></div>
+                <h3>Students</h3>
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th>ID</th>
-    
-                            <th>First Name</th>
-    
-                            <th>Last Name</th>
-    
-                            <th>Delete</th>
+                            <th class="text-left">First Name</th>
+                            <th class="text-left">Last Name</th>
+                            <th></th>
                         </tr>
                     </thead>
-    
-                    <tr>
-                        <td>1919</td>
-    
-                        <td>Jeb</td>
-    
-                        <td>Bush</td>
-    
-                        <td class="delete"><a href="" data-toggle="modal" data-target="#myModal"></a></td>
+                    <tr ng-repeat="student in students">    
+                        <td><input class="form-control" type="text" ng-model="student.firstname" ng-blur="updateStudent(student)" /></td>
+                        <td><input class="form-control" type="text" ng-model="student.lastname" ng-blur="updateStudent(student)" /></td>
+                        <td><a class="btn btn-error" ng-click="deleteStudent(student)"><span class="glyphicon glyphicon-trash"></span></a></td>
                     </tr>
-    
-                    <tr>
-                        <td>2016</td>
-    
-                        <td>Hillary</td>
-    
-                        <td>Clinton</td>
-    
-                        <td class="delete"><a href="" data-toggle="modal" data-target="#myModal"></a></td>
+                    <tr>    
+                        <td><input class="form-control" type="text" ng-model="newStudent.firstname" /></td>
+                        <td><input class="form-control" type="text" ng-model="newStudent.lastname" /></td>
+                        <td><a class="btn btn-info" ng-click="addStudent()">Add Student</a></td>
                     </tr>
-                </table><a class="btn btn-default" href="index.html" role="button" id="add-student-button"> Add a Student</a>
-    
+                </table>
                 <div class="border"></div>
             </div>
     
-            <div class="col-sm-10 col-sm-offset-1">
-                <button type="submit" class="btn btn-default">Save</button>
+            <div class="col-sm-12 text-right">
+                <a class="btn btn-default" href="/data/classes">Cancel</a>
+                <a class="btn btn-success" ng-click="saveClass(classDetails[0])">Save</a>
             </div>
         </div>
     </div>

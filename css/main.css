@@ -15,10 +15,6 @@ nav {
     margin-top: 20px;
 }
 
-table {
-	margin-top: 3em;
-}
-
 thead {
 	background-color: #999;
 	color: #fff;
@@ -49,7 +45,8 @@ button[type="submit"] {
 	height:50px;
 	width: 50px;
 	background-color: #777;
-	margin-left: 25%;
+	float: left;
+    margin-right: 15px;
 }
 
 .form-group .placeholder {
@@ -108,8 +105,6 @@ button[type="submit"] {
 	margin-bottom: 20px;
 }
 
-
-
 #addProject {
 	background: #efefef;
 }
@@ -118,7 +113,6 @@ button[type="submit"] {
 	margin-top: 15px;
 	margin-bottom: 15px;
 }
-
 
 #all-projects {
 	display: inline-block;

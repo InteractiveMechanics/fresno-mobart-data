@@ -1,6 +1,9 @@
 var mobart = angular.module('mobart', ['ngRoute', 'appControllers', 'ngFileUpload', 'ui.bootstrap']);
 var appControllers = angular.module('appControllers', []);
 
+mobart.run(function($rootScope) {
+    $rootScope.uid = 0;
+});
 mobart.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
     $routeProvider
         .when('/', {
@@ -15,7 +18,7 @@ mobart.config(['$routeProvider', '$locationProvider', function($routeProvider, $
             templateUrl: 'js/views/classes/class-details.html',
             controller: 'AddClassController'
         })
-        .when('/classes/edit', {
+        .when('/classes/edit/:id', {
             templateUrl: 'js/views/classes/class-details.html',
             controller: 'EditClassController'
         })
@@ -27,7 +30,7 @@ mobart.config(['$routeProvider', '$locationProvider', function($routeProvider, $
             templateUrl: 'js/views/projects/project-details.html',
             controller: 'AddProjectController'
         })
-        .when('/projects/edit', {
+        .when('/projects/edit/:id', {
             templateUrl: 'js/views/projects/project-details.html',
             controller: 'EditProjectController'
         })

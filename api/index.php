@@ -17,11 +17,16 @@
     $app->get('/files/:fid', getFileById);
 
     $app->post('/files', postFile);
+    $app->post('/classes', postClass);
+    $app->post('/classes/:cid/students', postStudent);
 
     $app->put('/grades/:gid', updateGrade);
+    $app->put('/classes/:cid', updateClass);
+    $app->put('/classes/:cid/students/:sid', updateStudent);
 
     $app->delete('/grades/:gid', deleteGrade);
     $app->delete('/classes/:cid', deleteClass);
+    $app->delete('/classes/:cid/students/:sid', deleteStudent);
     $app->delete('/projects/:pid', deleteProject);
 
     $app->run();
@@ -128,6 +133,7 @@
                 mobart_class.classtype,
                 mobart_class.room,
                 mobart_class.tid,
+                mobart_project.id AS pid,
                 mobart_project.name                
             FROM 
                 mobart_class,
@@ -263,6 +269,56 @@
             echo json_encode($e->getMessage()); 
         }
     }
+    function postClass() {
+        global $app;
+
+        $req    = json_decode($app->request->getBody());
+        $vars   = get_object_vars($req);
+     
+        $sql = '
+            INSERT INTO 
+                mobart_class (`classname`, `room`, `classtype`, `tid`, `pid`) 
+            VALUES 
+                (:classname, :room, :classtype, :tid, :pid)';
+        try {
+            $db = getDB();
+            $stmt = $db->prepare($sql);  
+            $stmt->bindParam('classname', $vars['classname']);
+            $stmt->bindParam('room', $vars['room']);
+            $stmt->bindParam('classtype', $vars['classtype']);
+            $stmt->bindParam('tid', $vars['tid']);
+            $stmt->bindParam('pid', $vars['pid']);
+            $stmt->execute();
+
+            $db = null;
+        } catch(PDOException $e) {
+            echo json_encode($e->getMessage()); 
+        }
+    }
+    function postStudent($cid) {
+        global $app;
+
+        $req    = json_decode($app->request->getBody());
+        $vars   = get_object_vars($req);
+     
+        $sql = '
+            INSERT INTO 
+                mobart_student (`firstname`, `lastname`, `cid`) 
+            VALUES 
+                (:firstname, :lastname, :cid)';
+        try {
+            $db = getDB();
+            $stmt = $db->prepare($sql);  
+            $stmt->bindParam('cid', $vars['id']);
+            $stmt->bindParam('firstname', $vars['firstname']);
+            $stmt->bindParam('lastname', $vars['lastname']);
+            $stmt->execute();
+
+            $db = null;
+        } catch(PDOException $e) {
+            echo json_encode($e->getMessage()); 
+        }
+    }
 
 
     function updateGrade($gid) {
@@ -272,12 +328,15 @@
         $vars   = get_object_vars($req);
      
         $sql = '
-            UPDATE mobart_project_grade
-            SET ex1grade = :ex1grade, 
+            UPDATE 
+                mobart_project_grade
+            SET 
+                ex1grade = :ex1grade, 
                 ex2grade = :ex2grade, 
                 ex3grade = :ex3grade, 
                 ex4grade = :ex4grade
-            WHERE id = :gid';
+            WHERE 
+                id = :gid';
         try {
             $db = getDB();
             $stmt = $db->prepare($sql);
@@ -286,6 +345,68 @@
             $stmt->bindParam('ex2grade', $vars['ex2grade']);
             $stmt->bindParam('ex3grade', $vars['ex3grade']);
             $stmt->bindParam('ex4grade', $vars['ex4grade']);
+            $stmt->execute();
+
+            $db = null;
+        } catch(PDOException $e) {
+            echo json_encode($e->getMessage()); 
+        }
+    }
+    function updateClass($cid) {
+        global $app;
+
+        $req    = json_decode($app->request->getBody());
+        $vars   = get_object_vars($req);
+     
+        $sql = '
+            UPDATE 
+                mobart_class
+            SET 
+                classname = :classname, 
+                classtype = :classtype, 
+                room = :room, 
+                tid = :tid,
+                pid = :pid 
+            WHERE 
+                id = :cid';
+        try {
+            $db = getDB();
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam('cid', $cid);
+            $stmt->bindParam('classname', $vars['classname']);
+            $stmt->bindParam('classtype', $vars['classtype']);
+            $stmt->bindParam('room', $vars['room']);
+            $stmt->bindParam('tid', $vars['tid']);
+            $stmt->bindParam('pid', $vars['pid']);
+            $stmt->execute();
+
+            $db = null;
+        } catch(PDOException $e) {
+            echo json_encode($e->getMessage()); 
+        }
+    }
+    function updateStudent($cid, $sid) {
+        global $app;
+
+        $req    = json_decode($app->request->getBody());
+        $vars   = get_object_vars($req);
+     
+        $sql = '
+            UPDATE 
+                mobart_student
+            SET 
+                firstname = :firstname, 
+                lastname = :lastname,
+                cid = :cid 
+            WHERE 
+                id = :sid';
+        try {
+            $db = getDB();
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam('sid', $sid);
+            $stmt->bindParam('cid', $cid);
+            $stmt->bindParam('firstname', $vars['firstname']);
+            $stmt->bindParam('lastname', $vars['lastname']);
             $stmt->execute();
 
             $db = null;
@@ -318,6 +439,21 @@
             $db = getDB();
             $stmt = $db->prepare($sql);  
             $stmt->bindParam('cid', $cid);
+            $stmt->execute();
+
+            $db = null;
+        } catch(PDOException $e) {
+            echo json_encode($e->getMessage());
+        }
+    }
+    function deleteStudent($cid, $sid) {
+        $sql = '
+            DELETE FROM mobart_student 
+            WHERE id = :sid';
+        try {
+            $db = getDB();
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam('sid', $sid);
             $stmt->execute();
 
             $db = null;
