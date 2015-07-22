@@ -1,8 +1,8 @@
-mobart.controller('DeleteModalController', function($scope, $http, $route, $modalInstance, db, record){
+mobart.controller('DeleteModalController', function($scope, $http, $route, $modalInstance, $rootScope, db, record){
     $scope.record = record;
 
     $scope.delete = function (id) {
-        var promise = $http.delete('/data/api/' + db + '/' + id);
+        var promise = $http.delete($rootScope.baseUrl + '/api/' + db + '/' + id);
         promise.success(function(data, status, headers, config){
             if (status == 200){
 		        console.log("Record deleted.");

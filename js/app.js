@@ -3,6 +3,7 @@ var appControllers = angular.module('appControllers', []);
 
 mobart.run(function($rootScope) {
     $rootScope.uid = 0;
+    $rootScope.baseUrl = '/data';
 });
 mobart.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
     $routeProvider

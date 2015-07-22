@@ -1,6 +1,6 @@
-mobart.controller('AllProjectsController', function($scope, $modal, $http, $location){
+mobart.controller('AllProjectsController', function($scope, $modal, $http, $location, $rootScope){
     $http
-        .get('/data/api/projects')
+        .get($rootScope.baseUrl + '/api/projects')
         .success(function(response) {
             $scope.projects = response;
     });

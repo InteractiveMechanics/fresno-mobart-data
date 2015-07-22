@@ -1,23 +1,23 @@
 mobart.controller('EditClassController', function($scope, $rootScope, $routeParams, $http, $location){
     $scope.editable = true;
     $http
-        .get('/data/api/classes/' + $routeParams.id + '/students')
+        .get($rootScope.baseUrl + '/api/classes/' + $routeParams.id + '/students')
         .success(function(response) {
             $scope.students = response;
     });
     $http
-        .get('/data/api/projects')
+        .get($rootScope.baseUrl + '/api/projects')
         .success(function(response) {
             $scope.projects = response;
     });
     $http
-        .get('/data/api/classes/' + $routeParams.id)
+        .get($rootScope.baseUrl + '/api/classes/' + $routeParams.id)
         .success(function(response) {
             $scope.classDetails = response;
     });
 
     $scope.saveClass = function () {
-        var promise = $http.put('/data/api/classes/' + $routeParams.id, $scope.classDetails[0]);
+        var promise = $http.put($rootScope.baseUrl + '/api/classes/' + $routeParams.id, $scope.classDetails[0]);
         promise.success(function(data, status, headers, config){
             if (status == 200){
 		        console.log("Class updated.");
@@ -28,7 +28,7 @@ mobart.controller('EditClassController', function($scope, $rootScope, $routePara
         });
     }
     $scope.updateStudent = function (student) {
-        var promise = $http.put('/data/api/classes/' + $routeParams.id + '/students/' + student.id, student);
+        var promise = $http.put($rootScope.baseUrl + '/api/classes/' + $routeParams.id + '/students/' + student.id, student);
         promise.success(function(data, status, headers, config){
             if (status == 200){
 		        console.log("Student updated.");
@@ -39,7 +39,7 @@ mobart.controller('EditClassController', function($scope, $rootScope, $routePara
     }
     $scope.addStudent = function () {
         $scope.newStudent.id = $routeParams.id;
-        var promise = $http.post('/data/api/classes/' + $routeParams.id + '/students', $scope.newStudent);
+        var promise = $http.post($rootScope.baseUrl + '/api/classes/' + $routeParams.id + '/students', $scope.newStudent);
         promise.success(function(data, status, headers, config){
             if (status == 200){
 		        console.log("Student created.");
@@ -59,7 +59,7 @@ mobart.controller('EditClassController', function($scope, $rootScope, $routePara
         });
     }
     $scope.deleteStudent = function (student) {
-        var promise = $http.delete('/data/api/classes/' + $routeParams.id + '/students/' + student.id);
+        var promise = $http.delete($rootScope.baseUrl + '/api/classes/' + $routeParams.id + '/students/' + student.id);
         promise.success(function(data, status, headers, config){
             if (status == 200){
                 $scope.students.splice($scope.students.indexOf(student), 1)

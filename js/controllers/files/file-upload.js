@@ -1,10 +1,10 @@
-mobart.controller('FileUploadController', function($scope, $http, Upload, $timeout){
+mobart.controller('FileUploadController', function($scope, $http, Upload, $timeout, $rootScope){
     $scope.upload = function (files) {
         if (files && files.length) {
             for (var i = 0; i < files.length; i++) {
                 var file = files[i];
                 Upload.upload({
-                    url: '/data/api/upload.php',
+                    url: $rootScope.baseUrl + '/api/upload.php',
                     file: file
                 }).success(function (data, status, headers, config) {
                     var fileData  = {
@@ -15,7 +15,7 @@ mobart.controller('FileUploadController', function($scope, $http, Upload, $timeo
                        'type'             : file.type
                     };
 
-                    var promise = $http.post('/data/api/files', fileData);
+                    var promise = $http.post($rootScope.baseUrl + '/api/files', fileData);
                     promise.success(function(data, status, headers, config){
                         if (status == 200){
             		        console.log("File added to database.");

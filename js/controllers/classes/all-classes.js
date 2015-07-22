@@ -1,6 +1,6 @@
-mobart.controller('AllClassesController', function($scope, $modal, $http, $location){
+mobart.controller('AllClassesController', function($scope, $modal, $http, $location, $rootScope){
     $http
-        .get('/data/api/classes')
+        .get($rootScope.baseUrl + '/api/classes')
         .success(function(response) {
             $scope.classes = response;
     });

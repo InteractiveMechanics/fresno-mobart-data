@@ -1,6 +1,6 @@
-mobart.controller('AllGradesController', function($scope, $modal, $http, $location){
+mobart.controller('AllGradesController', function($scope, $modal, $http, $location, $rootScope){
     $http
-        .get('/data/api/grades')
+        .get($rootScope.baseUrl + '/api/grades')
         .success(function(response) {
             $scope.grades = response;
             
