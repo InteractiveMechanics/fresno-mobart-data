@@ -6,7 +6,7 @@
 
                 <nav class="pull-right">
                     <div class="form-inline">
-                        <a class="btn btn-primary" id="add-class-button" href="/data/classes/add" role="button"> Add a Class</a>
+                        <a class="btn btn-primary" id="add-class-button" href="./classes/add" role="button"> Add a Class</a>
                         <div class="btn-group" role="group" aria-label="classes">
                             <button type="button" class="btn btn-default" ng-click="classTypeFilter = ''">All Classes</button>
                             <button type="button" class="btn btn-default" ng-click="classTypeFilter = {classtype: 'Visual Art'}">Visual Arts</button>
@@ -36,7 +36,7 @@
                 <td class="teacher">{{ class.tid }}</td>
                 <td class="project-name">{{ class.name }}</td>
                 <td class="room number">{{ class.room }}</td>
-                <td class="edit"><a href="/data/classes/edit/{{ class.id }}"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                <td class="edit"><a href="./classes/edit/{{ class.id }}"><span class="glyphicon glyphicon-pencil"></span></a></td>
                 <td class="delete"><a ng-click="deleteModal(class)"><span class="glyphicon glyphicon-trash"></span></a></td>
             </tr>
         </table>
