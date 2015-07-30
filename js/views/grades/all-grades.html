@@ -42,10 +42,10 @@
             <tr ng-repeat="student in grades | filter:search:strict" data-gid="{{ student.id }}">
                 <td class="student-name">{{ student.firstname + " " + student.lastname }}</td>
                 <td class="artwork">
-                    <div class="placeholder"></div>
+                    <div class="placeholder"><img ng-src="/data/files/{{ student.artworkfilepath }}" /></div>
                 </td>
                 <td class="writing-sample">
-                    <div class="placeholder"></div>
+                    <div class="placeholder"><img ng-src="/data/files/{{ student.writingsamplefilepath }}" /></div>
                 </td>
                 <td class="dimension">{{ student.ex1grade }}</td>
                 <td class="dimension">{{ student.ex2grade }}</td>

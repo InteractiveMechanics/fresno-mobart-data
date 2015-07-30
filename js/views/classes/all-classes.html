@@ -24,7 +24,7 @@
                 <tr>
                     <th>Class</th>
                     <th>Teacher</th>
-                    <th>Project</th>
+                    <th class="hidden">Project</th>
                     <th>Room Number</th>
                     <th></th>
                     <th></th>
@@ -34,7 +34,7 @@
             <tr ng-repeat="class in classes | filter:classTypeFilter">
                 <td class="class-name">{{ class.classname }}</td>
                 <td class="teacher">{{ class.tid }}</td>
-                <td class="project-name">{{ class.name }}</td>
+                <td class="project-name hidden">{{ class.name }}</td>
                 <td class="room number">{{ class.room }}</td>
                 <td class="edit"><a href="./classes/edit/{{ class.id }}"><span class="glyphicon glyphicon-pencil"></span></a></td>
                 <td class="delete"><a ng-click="deleteModal(class)"><span class="glyphicon glyphicon-trash"></span></a></td>

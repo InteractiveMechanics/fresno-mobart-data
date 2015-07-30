@@ -9,6 +9,7 @@
 
     $app->get('/grades', getGrades);
     $app->get('/grades/:gid', getGradeById);
+    $app->get('/incomplete/:tid', getIncompleteGradesById);
     $app->get('/classes', getClasses);
     $app->get('/classes/:cid', getClassById);
     $app->get('/classes/:cid/students', getStudentsFromClass);
@@ -41,18 +42,98 @@
                 mobart_class.tid,
                 mobart_student.firstname, 
                 mobart_student.lastname, 
+                mobart_project_grade.incomplete,
                 mobart_project_grade.ex1grade, 
                 mobart_project_grade.ex2grade, 
                 mobart_project_grade.ex3grade, 
-                mobart_project_grade.ex4grade
+                mobart_project_grade.ex4grade,
+                mobart_project_grade.artworkid,
+                mobart_project_grade.writingid,
+                (
+                    SELECT
+                        mobart_file.filename
+                    FROM
+                        mobart_file,
+                        mobart_project_grade
+                    WHERE
+                        mobart_file.id = mobart_project_grade.artworkid
+                ) AS artworkfilepath,
+                (
+                    SELECT
+                        mobart_file.filename
+                    FROM
+                        mobart_file,
+                        mobart_project_grade
+                    WHERE
+                        mobart_file.id = mobart_project_grade.writingid
+                ) AS writingsamplefilepath
             FROM 
                 mobart_class, 
                 mobart_student, 
-                mobart_project_grade 
+                mobart_project_grade
             WHERE 
                 mobart_class.id = mobart_student.cid 
             AND 
                 mobart_student.id = mobart_project_grade.sid 
+            ORDER BY 
+                mobart_class.id DESC';
+        try {
+            $db     = getDB();
+            $query  = $db->query($sql);
+            $tours  = $query->fetchAll(PDO::FETCH_OBJ);
+            $db     = null;
+    
+            echo json_encode($tours);
+        } catch(PDOException $e) {
+            echo json_encode($e->getMessage());
+        }
+    }
+    function getIncompleteGradesById($tid) {
+        $sql = '
+            SELECT
+                mobart_project_grade.id,
+                mobart_student.cid, 
+                mobart_class.classname, 
+                mobart_class.classtype, 
+                mobart_class.tid,
+                mobart_student.firstname, 
+                mobart_student.lastname, 
+                mobart_project_grade.ex1grade, 
+                mobart_project_grade.ex2grade, 
+                mobart_project_grade.ex3grade, 
+                mobart_project_grade.ex4grade,
+                mobart_project_grade.artworkid,
+                mobart_project_grade.writingid,
+                (
+                    SELECT
+                        mobart_file.filename
+                    FROM
+                        mobart_file,
+                        mobart_project_grade
+                    WHERE
+                        mobart_file.id = mobart_project_grade.artworkid
+                ) AS artworkfilepath,
+                (
+                    SELECT
+                        mobart_file.filename
+                    FROM
+                        mobart_file,
+                        mobart_project_grade
+                    WHERE
+                        mobart_file.id = mobart_project_grade.writingid
+                ) AS writingsamplefilepath
+            FROM 
+                mobart_class, 
+                mobart_student, 
+                mobart_project_grade
+            WHERE 
+                mobart_class.id = mobart_student.cid 
+            AND 
+                mobart_class.tid = ' . $tid . ' 
+            AND 
+                mobart_student.id = mobart_project_grade.sid
+            AND
+                mobart_project_grade.incomplete = 1
             ORDER BY 
                 mobart_class.id DESC';
         try {
@@ -74,10 +155,31 @@
                 mobart_class.classtype, 
                 mobart_student.firstname, 
                 mobart_student.lastname, 
+                mobart_project_grade.incomplete,
                 mobart_project_grade.ex1grade, 
                 mobart_project_grade.ex2grade, 
                 mobart_project_grade.ex3grade, 
-                mobart_project_grade.ex4grade 
+                mobart_project_grade.ex4grade,
+                mobart_project_grade.artworkid,
+                mobart_project_grade.writingid,
+                (
+                    SELECT
+                        mobart_file.filename
+                    FROM
+                        mobart_file,
+                        mobart_project_grade
+                    WHERE
+                        mobart_file.id = mobart_project_grade.artworkid
+                ) AS artworkfilepath,
+                (
+                    SELECT
+                        mobart_file.filename
+                    FROM
+                        mobart_file,
+                        mobart_project_grade
+                    WHERE
+                        mobart_file.id = mobart_project_grade.writingid
+                ) AS writingsamplefilepath
             FROM 
                 mobart_class, 
                 mobart_student, 
@@ -112,6 +214,8 @@
             FROM 
                 mobart_class,
                 mobart_project
+            WHERE
+                mobart_class.pid = mobart_project.id
             ORDER BY 
                 mobart_class.id DESC';
         try {
@@ -140,6 +244,8 @@
                 mobart_project
             WHERE
                 mobart_class.id = ' . $cid . '
+            AND 
+                mobart_class.pid = mobart_project.id
             ORDER BY 
                 mobart_class.id DESC';
         try {
@@ -256,14 +362,17 @@
             INSERT INTO 
                 mobart_file (`filename`, `filepath`, `mimetype`) 
             VALUES 
-                (:filename, "/data/files/", :mimetype)';
+                (:filename, "/files/", :mimetype)';
         try {
             $db = getDB();
             $stmt = $db->prepare($sql);  
             $stmt->bindParam('filename', $vars['name']);
-            $stmt->bindParam('mimetype', $vars['type']);
+            $stmt->bindParam('mimetype', $vars['mimetype']);
             $stmt->execute();
 
+            $result = $db->lastInsertId();
+            print_r($result);            
+            
             $db = null;
         } catch(PDOException $e) {
             echo json_encode($e->getMessage()); 
@@ -319,6 +428,35 @@
             echo json_encode($e->getMessage()); 
         }
     }
+    function postGrade($cid) {
+        global $app;
+
+        $req    = json_decode($app->request->getBody());
+        $vars   = get_object_vars($req);
+     
+        $sql = '
+            INSERT INTO 
+                mobart_project_grade (`cid`, `sid`, `artworkid`, `writingid`, `ex1grade`, `ex2grade`, `ex3grade`, `ex4grade`) 
+            VALUES 
+                (:cid, :sid, :artworkid, :writingid, :ex1grade, :ex2grade, :ex3grade, :ex4grade)';
+        try {
+            $db = getDB();
+            $stmt = $db->prepare($sql);  
+            $stmt->bindParam('cid', $vars['cid']);
+            $stmt->bindParam('sid', $vars['sid']);
+            $stmt->bindParam('artworkid', $vars['artworkid']);
+            $stmt->bindParam('writingid', $vars['writingid']);
+            $stmt->bindParam('ex1grade', $vars['ex1grade']);
+            $stmt->bindParam('ex2grade', $vars['ex2grade']);
+            $stmt->bindParam('ex3grade', $vars['ex3grade']);
+            $stmt->bindParam('ex4grade', $vars['ex4grade']);
+            $stmt->execute();
+
+            $db = null;
+        } catch(PDOException $e) {
+            echo json_encode($e->getMessage()); 
+        }
+    }
 
 
     function updateGrade($gid) {
@@ -331,10 +469,13 @@
             UPDATE 
                 mobart_project_grade
             SET 
+                incomplete = 0,
                 ex1grade = :ex1grade, 
                 ex2grade = :ex2grade, 
                 ex3grade = :ex3grade, 
-                ex4grade = :ex4grade
+                ex4grade = :ex4grade,
+                artworkid = :artworkid,
+                writingid = :writingid
             WHERE 
                 id = :gid';
         try {
@@ -345,6 +486,8 @@
             $stmt->bindParam('ex2grade', $vars['ex2grade']);
             $stmt->bindParam('ex3grade', $vars['ex3grade']);
             $stmt->bindParam('ex4grade', $vars['ex4grade']);
+            $stmt->bindParam('artworkid', $vars['artworkid']);
+            $stmt->bindParam('writingid', $vars['writingid']);
             $stmt->execute();
 
             $db = null;

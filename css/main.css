@@ -47,6 +47,11 @@ button[type="submit"] {
 	background-color: #777;
 	float: left;
     margin-right: 15px;
+    overflow: hidden;
+}
+.placeholder > img {
+    width: 100%;
+    height: auto;
 }
 
 .form-group .placeholder {
