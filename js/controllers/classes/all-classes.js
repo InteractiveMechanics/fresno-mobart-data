@@ -4,6 +4,8 @@ mobart.controller('AllClassesController', function($scope, $modal, $http, $locat
         .success(function(response) {
             $scope.classes = response;
     });
+    
+    $scope.sortClasstype = '';
 
     $scope.deleteModal = function (_class) {
         var modalInstance = $modal.open({

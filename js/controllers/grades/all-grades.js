@@ -3,12 +3,16 @@ mobart.controller('AllGradesController', function($scope, $modal, $http, $locati
         .get($rootScope.baseUrl + '/api/grades')
         .success(function(response) {
             $scope.grades = response;
-            
     });
 
-    $scope.currentUserId = 1;
+    $scope.uid = $rootScope.uid;
+    $scope.sortClasstype = '';
+    $scope.sortUsers = '';
+    $scope.sortType = 'cid';
+    $scope.sortReverse = false;
+
     $scope.total = function (val1, val2, val3, val4) {
-        return parseInt(val1) + parseInt(val2) + parseInt(val3) + parseInt(val4);
+        return parseInt(val1) + parseInt(val2) + parseInt(val3);
     };
 
     $scope.editModal = function (_student) {
@@ -43,4 +47,9 @@ mobart.controller('AllGradesController', function($scope, $modal, $http, $locati
             }
         });
     }
+
+    $scope.getArray = $scope.grades;
+    $scope.getHeader = function () {
+        return ["ID", "ClassID", "ClassName", "classType", "TeacherID", "StudentFirst", "StudentLast", "Incomplete?", "Grade1", "Grade2", "Grade3", "Grade4"]
+    };
 });

@@ -9,8 +9,8 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="placeholder">
-                    <img ng-show="artwork[0] != null" ngf-src="artwork[0]" />
-                    <img ng-hide="artwork[0] != null" ng-src="/data/files/{{ record.artworkfilepath }}" />
+                    <img ng-show="artwork[0] != null" ngf-default-src="/mobart/data/no_file.png" ngf-src="artwork[0]" />
+                    <img ng-hide="artwork[0] != null" ng-src="/mobart/data/files/{{ record.artworkfilepath }}" />
                 </div>
                 <div class="form-group">
                     <button ngf-select ng-model="artwork" ngf-change="uploadArtwork($files)" class="btn btn-default">Upload Artwork</button>
@@ -20,8 +20,8 @@
     
             <div class="col-sm-6">
                 <div class="placeholder">
-                    <img ng-show="writing[0] != null" ngf-src="writing[0]" />
-                    <img ng-hide="writing[0] != null" ng-src="/data/files/{{ record.writingsamplefilepath }}" />
+                    <img ng-show="writing[0] != null" ngf-default-src="/mobart/data/no_file.png" ngf-src="writing[0]" />
+                    <img ng-hide="writing[0] != null" ng-src="/mobart/data/files/{{ record.writingsamplefilepath }}" />
                 </div>
                 <div class="form-group">
                     <button ngf-select ng-model="writing" ngf-change="uploadWritingSample($files)" class="btn btn-default">Upload Writing Sample</button>

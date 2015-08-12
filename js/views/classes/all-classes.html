@@ -7,10 +7,10 @@
                 <nav class="pull-right">
                     <div class="form-inline">
                         <a class="btn btn-primary" id="add-class-button" href="./classes/add" role="button"> Add a Class</a>
-                        <div class="btn-group" role="group" aria-label="classes">
-                            <button type="button" class="btn btn-default" ng-click="classTypeFilter = ''">All Classes</button>
-                            <button type="button" class="btn btn-default" ng-click="classTypeFilter = {classtype: 'Visual Art'}">Visual Arts</button>
-                            <button type="button" class="btn btn-default" ng-click="classTypeFilter = {classtype: 'Theatre'}">Theatre</button>
+                        <div class="btn-group" role="group">
+                            <label class="btn btn-default active" ng-model="sortClasstype" btn-radio="''">All Classes</label>
+                            <label class="btn btn-default" ng-model="sortClasstype" btn-radio="'Visual Art'">Visual Art</label>
+                            <label class="btn btn-default" ng-model="sortClasstype" btn-radio="'Theatre'">Theatre</label>
                         </div><!-- end classes button-group -->
                     </div>
                 </nav>
@@ -31,7 +31,7 @@
                 </tr>
             </thead>
 
-            <tr ng-repeat="class in classes | filter:classTypeFilter">
+            <tr ng-repeat="class in classes | filter:sortClasstype">
                 <td class="class-name">{{ class.classname }}</td>
                 <td class="teacher">{{ class.tid }}</td>
                 <td class="project-name hidden">{{ class.name }}</td>

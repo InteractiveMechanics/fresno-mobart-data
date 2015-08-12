@@ -49,7 +49,7 @@ button[type="submit"] {
     margin-right: 15px;
     overflow: hidden;
 }
-.placeholder > img {
+.placeholder img {
     width: 100%;
     height: auto;
 }

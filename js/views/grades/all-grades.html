@@ -7,14 +7,14 @@
                     <div class="form-inline">
                         <input ng-model="search.$" class="form-control" role="search" placeholder="Search students">
                         <div class="btn-group" role="group">
-                            <label class="btn btn-default" ng-model="search.tid" btn-radio="''">All Students</label>
-                            <label class="btn btn-default" ng-model="search.tid" btn-radio="{{ uid }}">My Students</label>
+                            <label class="btn btn-default active" ng-model="sortUsers" btn-radio="''">All Students</label>
+                            <label class="btn btn-default" ng-model="sortUsers" btn-radio="{{ uid }}">My Students</label>
                         </div><!-- end my student button-group -->
         
                         <div class="btn-group" role="group">
-                            <label class="btn btn-default" ng-model="search.classtype" btn-radio="''">All Classes</label>
-                            <label class="btn btn-default" ng-model="search.classtype" btn-radio="'Visual Art'">Visual Art</label>
-                            <label class="btn btn-default" ng-model="search.classtype" btn-radio="'Theatre'">Theatre</label>
+                            <label class="btn btn-default active" ng-model="sortClasstype" btn-radio="''">All Classes</label>
+                            <label class="btn btn-default" ng-model="sortClasstype" btn-radio="'Visual Art'">Visual Art</label>
+                            <label class="btn btn-default" ng-model="sortClasstype" btn-radio="'Theatre'">Theatre</label>
                         </div><!-- end classes button-group -->
                     </div>
                 </nav>
@@ -29,32 +29,40 @@
                     <th>Student Name</th>
                     <th>Artwork</th>
                     <th>Writing Sample</th>
-                    <th>Dimension 1</th>
-                    <th>Dimension 2</th>
-                    <th>Dimension 3</th>
-                    <th>Dimension 4</th>
+                    <th ng-click="sortType = 'ex1grade'; sortReverse = !sortReverse">Dimension 1
+                        <span ng-show="sortType == 'ex1grade' && !sortReverse" class="glyphicon glyphicon-triangle-top"></span>
+                        <span ng-show="sortType == 'ex1grade' && sortReverse" class="glyphicon glyphicon-triangle-bottom"></span>
+                    </th>
+                    <th ng-click="sortType = 'ex2grade'; sortReverse = !sortReverse">Dimension 2
+                        <span ng-show="sortType == 'ex2grade' && !sortReverse" class="glyphicon glyphicon-triangle-top"></span>
+                        <span ng-show="sortType == 'ex2grade' && sortReverse" class="glyphicon glyphicon-triangle-bottom"></span>
+                    </th>
+                    <th ng-click="sortType = 'ex3grade'; sortReverse = !sortReverse">Dimension 3
+                        <span ng-show="sortType == 'ex3grade' && !sortReverse" class="glyphicon glyphicon-triangle-top"></span>
+                        <span ng-show="sortType == 'ex3grade' && sortReverse" class="glyphicon glyphicon-triangle-bottom"></span>
+                    </th>
                     <th>Total</th>
                     <th></th>
                     <th></th>
                 </tr>
             </thead>
 
-            <tr ng-repeat="student in grades | filter:search:strict" data-gid="{{ student.id }}">
+            <tr ng-repeat="student in grades | orderBy:sortType:sortReverse | filter:search | filter:sortUsers | filter:sortClasstype track by student.id" data-gid="{{ student.id }}">
                 <td class="student-name">{{ student.firstname + " " + student.lastname }}</td>
                 <td class="artwork">
-                    <div class="placeholder"><img ng-src="/data/files/{{ student.artworkfilepath }}" /></div>
+                    <div class="placeholder"><a href="/mobart/data/files/{{ student.artworkfilepath }}" target="_blank"><img ngf-default-src="/mobart/data/no_file.png" ng-src="/mobart/data/files/{{ student.artworkfilepath }}" /></a></div>
                 </td>
                 <td class="writing-sample">
-                    <div class="placeholder"><img ng-src="/data/files/{{ student.writingsamplefilepath }}" /></div>
+                    <div class="placeholder"><a href="/mobart/data/files/{{ student.writingsamplefilepath }}" target="_blank"><img ngf-default-src="/mobart/data/no_file.png" ng-src="/mobart/data/files/{{ student.writingsamplefilepath }}" /></a></div>
                 </td>
-                <td class="dimension">{{ student.ex1grade }}</td>
-                <td class="dimension">{{ student.ex2grade }}</td>
-                <td class="dimension">{{ student.ex3grade }}</td>
-                <td class="dimension">{{ student.ex4grade }}</td>
-                <td class="total">{{ total(student.ex1grade, student.ex2grade, student.ex3grade, student.ex4grade) }}</td>
-                <td class="edit"><a ng-click="editModal(student)"><span class="glyphicon glyphicon-pencil"></span></a></td>
-                <td class="delete"><a ng-click="deleteModal(student)"><span class="glyphicon glyphicon-trash"></span></a></td>
+                <td class="dimension">{{ student.incomplete == 1 ? 'I' : student.ex1grade }}</td>
+                <td class="dimension">{{ student.incomplete == 1 ? 'I' : student.ex2grade }}</td>
+                <td class="dimension">{{ student.incomplete == 1 ? 'I' : student.ex3grade }}</td>
+                <td class="total">{{ student.incomplete == 1 ? 'I' : total(student.ex1grade, student.ex2grade, student.ex3grade) }}</td>
+                <td class="edit"><a ng-show="$root.uid == student.tid" ng-click="editModal(student)"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                <td class="delete"><a ng-show="$root.uid == student.tid" ng-click="deleteModal(student)"><span class="glyphicon glyphicon-trash"></span></a></td>
             </tr>
         </table>
+        <button class="btn btn-default" type="button" ng-csv="grades" csv-header="getHeader()" filename="MOBARTGradeTable.csv">Export as CSV</button>
     </div><!-- end table-responsive -->
 </div><!-- end container -->
