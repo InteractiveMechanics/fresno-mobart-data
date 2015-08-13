@@ -57,11 +57,11 @@
                 mobart_class, 
                 mobart_student, 
                 mobart_project_grade
-            INNER JOIN
+            LEFT JOIN
                 mobart_file artwork
             ON
                 mobart_project_grade.artworkid = artwork.id
-            INNER JOIN 
+            LEFT JOIN 
                 mobart_file writingsample
             ON
                 mobart_project_grade.writingid = writingsample.id
@@ -70,7 +70,7 @@
             AND 
                 mobart_student.id = mobart_project_grade.sid 
             ORDER BY 
-                mobart_class.id DESC';
+                mobart_project_grade.id DESC';
         try {
             $db     = getDB();
             $query  = $db->query($sql);
@@ -492,6 +492,9 @@
             $stmt->bindParam('ex3grade', $vars['ex3grade']);
             $stmt->bindParam('ex4grade', $vars['ex4grade']);
             $stmt->execute();
+
+            $result = $db->lastInsertId();
+            print_r($result);
 
             $db = null;
         } catch(PDOException $e) {

@@ -9,8 +9,9 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="placeholder">
-                    <img ng-show="artwork[0] != null" ngf-default-src="/mobart/data/no_file.png" ngf-src="artwork[0]" />
-                    <img ng-hide="artwork[0] != null" ng-src="/mobart/data/files/{{ record.artworkfilepath }}" />
+                    <img ng-hide="{{ student.artworkfilepath.substr(student.artworkfilepath.length - 3) == 'mp4' || 'mov' }}" ng-show="artwork[0] != null" ngf-default-src="/mobart/data/no_file.png" ngf-src="artwork[0]" />
+                    <img ng-hide="{{ student.artworkfilepath.substr(student.artworkfilepath.length - 3) == 'mp4' || 'mov' }}" ng-hide="artwork[0] != null" ng-src="{{ record.artworkfilepath ? '/mobart/data/files/' + record.artworkfilepath : '/mobart/data/no_file.png' }}" />
+                    <img ng-show="{{ student.artworkfilepath.substr(student.artworkfilepath.length - 3) == 'mp4' || 'mov' }}" ng-src="/mobart/data/no_file.png" />
                 </div>
                 <div class="form-group">
                     <button ngf-select ng-model="artwork" ngf-change="uploadArtwork($files)" class="btn btn-default">Upload Artwork</button>
@@ -20,8 +21,9 @@
     
             <div class="col-sm-6">
                 <div class="placeholder">
-                    <img ng-show="writing[0] != null" ngf-default-src="/mobart/data/no_file.png" ngf-src="writing[0]" />
-                    <img ng-hide="writing[0] != null" ng-src="/mobart/data/files/{{ record.writingsamplefilepath }}" />
+                    <img ng-hide="{{ student.writingsamplefilepath.substr(student.writingsamplefilepath.length - 3) == 'mp4' || 'mov' }}" ng-show="writing[0] != null" ngf-default-src="/mobart/data/no_file.png" ngf-src="writing[0]" />
+                    <img ng-hide="{{ student.writingsamplefilepath.substr(student.writingsamplefilepath.length - 3) == 'mp4' || 'mov' }}" ng-hide="writing[0] != null" ng-src="{{ record.writingsamplefilepath ? '/mobart/data/files/' + record.writingsamplefilepath : '/mobart/data/no_file.png' }}" />
+                    <img ng-show="{{ student.writingsamplefilepath.substr(student.writingsamplefilepath.length - 3) == 'mp4' || 'mov' }}" ng-src="/mobart/data/no_file.png" />
                 </div>
                 <div class="form-group">
                     <button ngf-select ng-model="writing" ngf-change="uploadWritingSample($files)" class="btn btn-default">Upload Writing Sample</button>
@@ -39,7 +41,6 @@
                 <li>Dimension 1 <select class="form-control" ng-model="record.ex1grade" ng-options="options for options in options"></select></li>
                 <li>Dimension 2 <select class="form-control" ng-model="record.ex2grade" ng-options="options for options in options"></select></li>
                 <li>Dimension 3 <select class="form-control" ng-model="record.ex3grade" ng-options="options for options in options"></select></li>
-                <li>Dimension 4 <select class="form-control" ng-model="record.ex4grade" ng-options="options for options in options"></select></li>
             </ul>
         </div>
 

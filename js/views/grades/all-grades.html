@@ -26,7 +26,10 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>Student Name</th>
+                    <th ng-click="sortType = 'lastname'; sortReverse = !sortReverse">Student Name
+                        <span ng-show="sortType == 'lastname' && !sortReverse" class="glyphicon glyphicon-triangle-top"></span>
+                        <span ng-show="sortType == 'lastname' && sortReverse" class="glyphicon glyphicon-triangle-bottom"></span>
+                    </th>
                     <th>Artwork</th>
                     <th>Writing Sample</th>
                     <th ng-click="sortType = 'ex1grade'; sortReverse = !sortReverse">Dimension 1
@@ -50,10 +53,20 @@
             <tr ng-repeat="student in grades | orderBy:sortType:sortReverse | filter:search | filter:sortUsers | filter:sortClasstype track by student.id" data-gid="{{ student.id }}">
                 <td class="student-name">{{ student.firstname + " " + student.lastname }}</td>
                 <td class="artwork">
-                    <div class="placeholder"><a href="/mobart/data/files/{{ student.artworkfilepath }}" target="_blank"><img ngf-default-src="/mobart/data/no_file.png" ng-src="/mobart/data/files/{{ student.artworkfilepath }}" /></a></div>
+                    <div class="placeholder">
+                        <a href="{{ student.artworkfilepath ? '/mobart/data/files/' + student.artworkfilepath : '#' }}" target="_blank">
+                            <img ng-hide="{{ student.artworkfilepath.substr(student.artworkfilepath.length - 3) == 'mp4' || 'mov' }}" ng-src="{{ student.artworkfilepath ? '/mobart/data/files/' + student.artworkfilepath : '/mobart/data/no_file.png' }}" />
+                            <img ng-show="{{ student.artworkfilepath.substr(student.artworkfilepath.length - 3) == 'mp4' || 'mov' }}" ng-src="/mobart/data/no_file.png" />
+                        </a>
+                    </div>
                 </td>
                 <td class="writing-sample">
-                    <div class="placeholder"><a href="/mobart/data/files/{{ student.writingsamplefilepath }}" target="_blank"><img ngf-default-src="/mobart/data/no_file.png" ng-src="/mobart/data/files/{{ student.writingsamplefilepath }}" /></a></div>
+                    <div class="placeholder">
+                        <a href="{{ student.writingsamplefilepath ? '/mobart/data/files/' + student.writingsamplefilepath : '#' }}" target="_blank">
+                            <img ng-hide="{{ student.writingsamplefilepath.substr(student.writingsamplefilepath.length - 3) == 'mp4' || 'mov' }}" ng-src="{{ student.writingsamplefilepath ? '/mobart/data/files/' + student.writingsamplefilepath : '/mobart/data/no_file.png' }}" />
+                            <img ng-show="{{ student.writingsamplefilepath.substr(student.writingsamplefilepath.length - 3) == 'mp4' || 'mov' }}" ng-src="/mobart/data/no_file.png" />
+                        </a>
+                    </div>
                 </td>
                 <td class="dimension">{{ student.incomplete == 1 ? 'I' : student.ex1grade }}</td>
                 <td class="dimension">{{ student.incomplete == 1 ? 'I' : student.ex2grade }}</td>
