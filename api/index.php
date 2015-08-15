@@ -57,11 +57,11 @@
                 mobart_class, 
                 mobart_student, 
                 mobart_project_grade
-            LEFT JOIN
+            INNER JOIN
                 mobart_file artwork
             ON
                 mobart_project_grade.artworkid = artwork.id
-            LEFT JOIN 
+            INNER JOIN 
                 mobart_file writingsample
             ON
                 mobart_project_grade.writingid = writingsample.id
@@ -70,7 +70,7 @@
             AND 
                 mobart_student.id = mobart_project_grade.sid 
             ORDER BY 
-                mobart_project_grade.id DESC';
+                mobart_class.id DESC';
         try {
             $db     = getDB();
             $query  = $db->query($sql);
@@ -188,8 +188,10 @@
         $sql = '
             SELECT 
                 mobart_project_grade.id,
+                mobart_class.id as cid,
                 mobart_class.classname, 
                 mobart_class.classtype, 
+                mobart_student.id as sid,
                 mobart_student.firstname, 
                 mobart_student.lastname, 
                 mobart_project_grade.incomplete,
@@ -199,32 +201,24 @@
                 mobart_project_grade.ex4grade,
                 mobart_project_grade.artworkid,
                 mobart_project_grade.writingid,
-                (
-                    SELECT
-                        mobart_file.filename
-                    FROM
-                        mobart_file,
-                        mobart_project_grade
-                    WHERE
-                        mobart_file.id = mobart_project_grade.artworkid
-                    LIMIT 1
-                ) AS artworkfilepath,
-                (
-                    SELECT
-                        mobart_file.filename
-                    FROM
-                        mobart_file,
-                        mobart_project_grade
-                    WHERE
-                        mobart_file.id = mobart_project_grade.writingid
-                    LIMIT 1
-                ) AS writingsamplefilepath
+                artwork.filename AS artworkfilepath,
+                writingsample.filename AS writingsamplefilepath
             FROM 
                 mobart_class, 
                 mobart_student, 
                 mobart_project_grade
+            INNER JOIN
+                mobart_file artwork
+            ON
+                mobart_project_grade.artworkid = artwork.id
+            INNER JOIN 
+                mobart_file writingsample
+            ON
+                mobart_project_grade.writingid = writingsample.id
             WHERE 
-                mobart_project_grade.id = ' . $gid . ' 
+                mobart_project_grade.id = ' . $gid . '
+            AND
+                mobart_class.id = mobart_student.cid
             AND 
                 mobart_project_grade.sid = mobart_student.id 
             ORDER BY 
@@ -493,10 +487,8 @@
             $stmt->bindParam('ex4grade', $vars['ex4grade']);
             $stmt->execute();
 
-            $result = $db->lastInsertId();
-            print_r($result);
-
             $db = null;
+            var_dump($vars['saved']);
         } catch(PDOException $e) {
             echo json_encode($e->getMessage()); 
         }
