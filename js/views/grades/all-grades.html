@@ -50,7 +50,7 @@
                 </tr>
             </thead>
 
-            <tr ng-repeat="student in grades | orderBy:sortType:sortReverse | filter:search | filter:sortUsers | filter:sortClasstype track by student.id" data-gid="{{ student.id }}">
+            <tr ng-repeat="student in grades | orderBy:sortType:sortReverse | filter:search | filter:{tid: sortUsers} | filter:sortClasstype track by student.id" data-gid="{{ student.id }}">
                 <td class="student-name">{{ student.firstname + " " + student.lastname }}</td>
                 <td class="artwork">
                     <div class="placeholder">

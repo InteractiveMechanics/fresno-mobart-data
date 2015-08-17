@@ -1,8 +1,9 @@
 var mobart = angular.module('mobart', ['ngRoute', 'ngSanitize', 'appControllers', 'ngFileUpload', 'ui.bootstrap', 'ngCsv']);
 var appControllers = angular.module('appControllers', []);
 
-mobart.run(function($rootScope) {
-    $rootScope.uid = 0;
+mobart.run(function($rootScope, $location) {
+    var uid = $location.search().uid;
+    $rootScope.uid = uid ? uid : '';
     $rootScope.baseUrl = '/mobart/data';
 });
 mobart.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){

@@ -488,7 +488,6 @@
             $stmt->execute();
 
             $db = null;
-            var_dump($vars['saved']);
         } catch(PDOException $e) {
             echo json_encode($e->getMessage()); 
         }
