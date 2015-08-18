@@ -57,16 +57,16 @@
                 mobart_class, 
                 mobart_student, 
                 mobart_project_grade
-            INNER JOIN
+            LEFT JOIN
                 mobart_file artwork
             ON
                 mobart_project_grade.artworkid = artwork.id
-            INNER JOIN 
+            LEFT JOIN 
                 mobart_file writingsample
             ON
                 mobart_project_grade.writingid = writingsample.id
             WHERE 
-                mobart_class.id = mobart_student.cid 
+                mobart_class.id = mobart_student.cid
             AND 
                 mobart_student.id = mobart_project_grade.sid 
             ORDER BY 
@@ -104,11 +104,11 @@
                 mobart_class, 
                 mobart_student, 
                 mobart_project_grade
-            INNER JOIN
+            LEFT JOIN
                 mobart_file artwork
             ON
                 mobart_project_grade.artworkid = artwork.id
-            INNER JOIN 
+            LEFT JOIN 
                 mobart_file writingsample
             ON
                 mobart_project_grade.writingid = writingsample.id
@@ -155,11 +155,11 @@
                 mobart_class, 
                 mobart_student, 
                 mobart_project_grade
-            INNER JOIN
+            LEFT JOIN
                 mobart_file artwork
             ON
                 mobart_project_grade.artworkid = artwork.id
-            INNER JOIN 
+            LEFT JOIN 
                 mobart_file writingsample
             ON
                 mobart_project_grade.writingid = writingsample.id
@@ -207,11 +207,11 @@
                 mobart_class, 
                 mobart_student, 
                 mobart_project_grade
-            INNER JOIN
+            LEFT JOIN
                 mobart_file artwork
             ON
                 mobart_project_grade.artworkid = artwork.id
-            INNER JOIN 
+            LEFT JOIN 
                 mobart_file writingsample
             ON
                 mobart_project_grade.writingid = writingsample.id
