@@ -43,9 +43,7 @@
             </div>
             <div class="col-sm-4">
                 <label>Teacher</label>
-                <select class="form-control" ng-model="classDetails[0].tid">
-                    <option value="0">Root user</option>
-                </select>
+                <select class="form-control" ng-model="classDetails[0].tid" ng-options="teacher.tid as teacher.firstname + ' ' + teacher.lastname for teacher in teachers"></select>
 
             </div>
             <div class="col-sm-4">

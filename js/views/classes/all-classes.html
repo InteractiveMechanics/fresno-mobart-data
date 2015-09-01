@@ -33,7 +33,7 @@
 
             <tr ng-repeat="class in classes | filter:sortClasstype">
                 <td class="class-name">{{ class.classname }}</td>
-                <td class="teacher">{{ class.tid }}</td>
+                <td class="teacher" ng-bind="getNameFromTid(class.tid)"></td>
                 <td class="project-name hidden">{{ class.name }}</td>
                 <td class="room number">{{ class.room }}</td>
                 <td class="edit"><a href="./classes/edit/{{ class.id }}"><span class="glyphicon glyphicon-pencil"></span></a></td>

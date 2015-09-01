@@ -17,6 +17,7 @@
     $app->get('/projects/', getProjects);
     $app->get('/projects/:pid', getProjectById);
     $app->get('/files/:fid', getFileById);
+    $app->get('/teachers', getTeachersFromMoodle);
 
     $app->post('/files', postFile);
     $app->post('/classes', postClass);
@@ -42,6 +43,7 @@
                 mobart_class.classname, 
                 mobart_class.classtype, 
                 mobart_class.tid,
+                mobart_project_grade.pid,
                 mobart_student.firstname, 
                 mobart_student.lastname, 
                 mobart_project_grade.incomplete,
@@ -90,6 +92,7 @@
                 mobart_class.classname, 
                 mobart_class.classtype, 
                 mobart_class.tid,
+                mobart_project_grade.pid,
                 mobart_student.firstname, 
                 mobart_student.lastname, 
                 mobart_project_grade.ex1grade, 
@@ -141,6 +144,7 @@
                 mobart_class.classname, 
                 mobart_class.classtype, 
                 mobart_class.tid,
+                mobart_project_grade.pid,
                 mobart_student.firstname, 
                 mobart_student.lastname, 
                 mobart_project_grade.ex1grade, 
@@ -190,7 +194,8 @@
                 mobart_project_grade.id,
                 mobart_class.id as cid,
                 mobart_class.classname, 
-                mobart_class.classtype, 
+                mobart_class.classtype,
+                mobart_project_grade.pid,
                 mobart_student.id as sid,
                 mobart_student.firstname, 
                 mobart_student.lastname, 
@@ -242,13 +247,9 @@
                 mobart_class.classname,
                 mobart_class.classtype,
                 mobart_class.room,
-                mobart_class.tid,
-                mobart_project.name
+                mobart_class.tid
             FROM 
-                mobart_class,
-                mobart_project
-            WHERE
-                mobart_class.pid = mobart_project.id
+                mobart_class
             ORDER BY 
                 mobart_class.id DESC';
         try {
@@ -383,7 +384,25 @@
             echo json_encode($e->getMessage());
         }
     }
-
+    function getTeachersFromMoodle() {
+        $sql = '
+            SELECT 
+                id AS tid,
+                firstname,
+                lastname
+            FROM 
+                mdl_user';
+        try {
+            $db     = getMoodleDB();
+            $query  = $db->query($sql);
+            $tour   = $query->fetchAll(PDO::FETCH_OBJ);
+            $db     = null;
+    
+            echo json_encode($tour);
+        } catch(PDOException $e) {
+            echo json_encode($e->getMessage());
+        }
+    }
 
     function postFile() {
         global $app;
@@ -419,9 +438,9 @@
      
         $sql = '
             INSERT INTO 
-                mobart_class (`classname`, `room`, `classtype`, `tid`, `pid`) 
+                mobart_class (`classname`, `room`, `classtype`, `tid`) 
             VALUES 
-                (:classname, :room, :classtype, :tid, :pid)';
+                (:classname, :room, :classtype, :tid)';
         try {
             $db = getDB();
             $stmt = $db->prepare($sql);  
@@ -429,7 +448,6 @@
             $stmt->bindParam('room', $vars['room']);
             $stmt->bindParam('classtype', $vars['classtype']);
             $stmt->bindParam('tid', $vars['tid']);
-            $stmt->bindParam('pid', $vars['pid']);
             $stmt->execute();
 
             $db = null;
@@ -469,9 +487,9 @@
      
         $sql = '
             INSERT INTO 
-                mobart_project_grade (`cid`, `sid`, `incomplete`, `saved`, `artworkid`, `writingid`, `ex1grade`, `ex2grade`, `ex3grade`, `ex4grade`) 
+                mobart_project_grade (`cid`, `sid`, `incomplete`, `saved`, `artworkid`, `writingid`, `ex1grade`, `ex2grade`, `ex3grade`, `ex4grade`, `pid`) 
             VALUES 
-                (:cid, :sid, :incomplete, :saved, :artworkid, :writingid, :ex1grade, :ex2grade, :ex3grade, :ex4grade)';
+                (:cid, :sid, :incomplete, :saved, :artworkid, :writingid, :ex1grade, :ex2grade, :ex3grade, :ex4grade, :pid)';
         try {
             $db = getDB();
             $stmt = $db->prepare($sql);  
@@ -485,6 +503,7 @@
             $stmt->bindParam('ex2grade', $vars['ex2grade']);
             $stmt->bindParam('ex3grade', $vars['ex3grade']);
             $stmt->bindParam('ex4grade', $vars['ex4grade']);
+            $stmt->bindParam('pid', $vars['pid']);
             $stmt->execute();
 
             $db = null;

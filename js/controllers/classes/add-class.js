@@ -1,6 +1,11 @@
 mobart.controller('AddClassController', function($scope, $rootScope, $routeParams, $http, $location){
 
     $http
+        .get($rootScope.baseUrl + '/api/teachers')
+        .success(function(response) {
+            $scope.teachers = response;
+    });
+    $http
         .get($rootScope.baseUrl + '/api/projects')
         .success(function(response) {
             $scope.projects = response;

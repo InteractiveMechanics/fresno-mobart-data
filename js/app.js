@@ -5,6 +5,21 @@ mobart.run(function($rootScope, $location) {
     var uid = $location.search().uid;
     $rootScope.uid = uid ? uid : '';
     $rootScope.baseUrl = '/mobart/data';
+
+    $rootScope.checkAdmins = function () {
+        switch (parseInt(uid)) {
+            case 2:
+            case 3:
+            case 6:
+            case 7:
+            case 8:
+            case 10:
+                return true;
+                break;
+            default:
+                return false;
+        }
+    }
 });
 mobart.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
     $routeProvider

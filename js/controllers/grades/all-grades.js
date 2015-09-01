@@ -4,6 +4,21 @@ mobart.controller('AllGradesController', function($scope, $modal, $http, $locati
         .success(function(response) {
             $scope.grades = response;
     });
+    $http
+        .get($rootScope.baseUrl + '/api/teachers')
+        .success(function(response) {
+            $scope.teachers = response;
+    });
+
+    $scope.getNameFromTid = function (id) {
+        var str = '';
+        angular.forEach($scope.teachers, function(value, key) {
+            if (id == value.tid) {
+                str = value.firstname + ' ' + value.lastname;
+            }
+        });
+        return str;
+    }
 
     $scope.uid = $rootScope.uid;
     $scope.sortClasstype = '';

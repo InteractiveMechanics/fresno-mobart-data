@@ -45,13 +45,13 @@ button[type="submit"] {
 	height:50px;
 	width: 50px;
 	background-color: #777;
-	float: left;
-    margin-right: 15px;
+	text-align: center;
+    display: inline-block;
     overflow: hidden;
 }
 .placeholder img {
-    width: 100%;
-    height: auto;
+    width: auto;
+    height: 100%;
 }
 
 .form-group .placeholder {

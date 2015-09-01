@@ -11,10 +11,16 @@ mobart.controller('EditClassController', function($scope, $rootScope, $routePara
             $scope.projects = response;
     });
     $http
+        .get($rootScope.baseUrl + '/api/teachers')
+        .success(function(response) {
+            $scope.teachers = response;
+    });
+    $http
         .get($rootScope.baseUrl + '/api/classes/' + $routeParams.id)
         .success(function(response) {
             $scope.classDetails = response;
     });
+    
 
     $scope.saveClass = function () {
         var promise = $http.put($rootScope.baseUrl + '/api/classes/' + $routeParams.id, $scope.classDetails[0]);
@@ -44,7 +50,7 @@ mobart.controller('EditClassController', function($scope, $rootScope, $routePara
             if (status == 200){
 		        console.log("Student created.");
                 $http
-                    .get('/data/api/classes/' + $routeParams.id + '/students')
+                    .get($rootScope.baseUrl + '/api/classes/' + $routeParams.id + '/students')
                     .success(function(response) {
                         $scope.students = response;
                         $scope.newStudent.firstname = '';

@@ -1,9 +1,19 @@
 <?php
 function getDB() {
-    $dbhost = "70.32.112.236";
-    $dbuser = "staging_mobart";
-    $dbpass = "Qv4ub2*1";
-    $dbname = "staging_mobart";
+    $dbhost = "localhost";
+    $dbuser = "iaccessf_moodle";
+    $dbpass = "@48;pbjKz2Q4";
+    $dbname = "iaccessf_mobart";
+    $dbConnection = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass); 
+    $dbConnection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    return $dbConnection;
+}
+function getMoodleDB() {
+    $dbhost = "localhost";
+    $dbuser = "iaccessf_moodle";
+    $dbpass = "@48;pbjKz2Q4";
+    $dbname = "iaccessf_moodle";
     $dbConnection = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass); 
     $dbConnection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 

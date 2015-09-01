@@ -39,7 +39,7 @@
 </head>
 <body>
     <main ng-view></main>
-    <div ng-show="$root.uid == 0" class="container">
+    <div ng-show="checkAdmins()" class="container">
         <div class="footer-nav pull-right">
             <a href="./">Grades</a> | <a href="./classes">Classes</a>
         </div>
