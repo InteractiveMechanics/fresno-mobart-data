@@ -54,6 +54,7 @@
                 mobart_project_grade.artworkid,
                 mobart_project_grade.writingid,
                 artwork.filename AS artworkfilepath,
+                artwork.mimetype AS artworkmimetype,
                 writingsample.filename AS writingsamplefilepath
             FROM 
                 mobart_class, 
@@ -102,6 +103,7 @@
                 mobart_project_grade.artworkid,
                 mobart_project_grade.writingid,
                 artwork.filename AS artworkfilepath,
+                artwork.mimetype AS artworkmimetype,
                 writingsample.filename AS writingsamplefilepath
             FROM 
                 mobart_class, 
@@ -154,6 +156,7 @@
                 mobart_project_grade.artworkid,
                 mobart_project_grade.writingid,
                 artwork.filename AS artworkfilepath,
+                artwork.mimetype AS artworkmimetype,
                 writingsample.filename AS writingsamplefilepath
             FROM 
                 mobart_class, 
@@ -207,6 +210,7 @@
                 mobart_project_grade.artworkid,
                 mobart_project_grade.writingid,
                 artwork.filename AS artworkfilepath,
+                artwork.mimetype AS artworkmimetype,
                 writingsample.filename AS writingsamplefilepath
             FROM 
                 mobart_class, 
@@ -270,18 +274,15 @@
                 mobart_class.classname,
                 mobart_class.classtype,
                 mobart_class.room,
-                mobart_class.tid,
-                mobart_project.id AS pid,
-                mobart_project.name                
+                mobart_class.tid              
             FROM 
                 mobart_class,
                 mobart_project
             WHERE
                 mobart_class.id = ' . $cid . '
-            AND 
-                mobart_class.pid = mobart_project.id
             ORDER BY 
-                mobart_class.id DESC';
+                mobart_class.id DESC
+            LIMIT 1';
         try {
             $db     = getDB();
             $query  = $db->query($sql);
@@ -565,8 +566,7 @@
                 classname = :classname, 
                 classtype = :classtype, 
                 room = :room, 
-                tid = :tid,
-                pid = :pid 
+                tid = :tid
             WHERE 
                 id = :cid';
         try {
@@ -577,7 +577,6 @@
             $stmt->bindParam('classtype', $vars['classtype']);
             $stmt->bindParam('room', $vars['room']);
             $stmt->bindParam('tid', $vars['tid']);
-            $stmt->bindParam('pid', $vars['pid']);
             $stmt->execute();
 
             $db = null;

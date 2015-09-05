@@ -9,15 +9,18 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="placeholder" style="float: left; margin-right: 10px;">
+                    <img ng-show="artwork[0] != null" ngf-default-src="/mobart/data/no_file.png" ngf-src="artwork[0]" />
+                    <img ng-show="{{ 
+                            record.artworkfilepath.substr(record.artworkfilepath.length - 3) == 'mp4' || 
+                            record.artworkfilepath.substr(record.artworkfilepath.length - 3) == 'mov' }}" ng-hide="artwork[0] != null" ng-src="/mobart/data/ic_video.png" />
+                    <img ng-show="{{ 
+                            record.artworkfilepath.substr(record.artworkfilepath.length - 3) == 'jpg' || 
+                            record.artworkfilepath.substr(record.artworkfilepath.length - 3) == 'png' }}" ng-hide="artwork[0] != null" ng-src="{{ '/mobart/data/files/' + record.artworkfilepath }}" />
                     <img ng-hide="{{ 
                             record.artworkfilepath.substr(record.artworkfilepath.length - 3) == 'jpg' || 
-                            record.artworkfilepath.substr(record.artworkfilepath.length - 3) == 'png' }}" ng-show="artwork[0] != null" ngf-default-src="/mobart/data/no_file.png" ngf-src="artwork[0]" />
-                    <img ng-show="{{ 
-                            record.artworkfilepath.substr(record.artworkfilepath.length - 3) == 'jpg' || 
-                            record.artworkfilepath.substr(record.artworkfilepath.length - 3) == 'png' }}" ng-hide="artwork[0] != null" ng-src="{{ record.artworkfilepath ? '/mobart/data/files/' + record.artworkfilepath : '/mobart/data/no_file.png' }}" />
-                    <img ng-show="{{ 
-                            record.artworkfilepath.substr(record.artworkfilepath.length - 3) == 'jpg' || 
-                            record.artworkfilepath.substr(record.artworkfilepath.length - 3) == 'png' }}" ng-src="/mobart/data/no_file.png" />
+                            record.artworkfilepath.substr(record.artworkfilepath.length - 3) == 'png' ||
+                            record.artworkfilepath.substr(record.artworkfilepath.length - 3) == 'mp4' || 
+                            record.artworkfilepath.substr(record.artworkfilepath.length - 3) == 'mov' }}" ng-src="/mobart/data/no_file.png" />
                 </div>
                 <div class="form-group">
                     <button ngf-select ng-model="artwork" ngf-change="uploadArtwork($files)" class="btn btn-default">Upload Artwork</button>
@@ -27,9 +30,7 @@
     
             <div class="col-sm-6">
                 <div class="placeholder" style="float: left; margin-right: 10px;">
-                    <img ng-hide="{{ 
-                            record.writingsamplefilepath.substr(record.writingsamplefilepath.length - 3) == 'jpg' || 
-                            record.writingsamplefilepath.substr(record.writingsamplefilepath.length - 3) == 'png' }}" ng-show="writing[0] != null" ngf-default-src="/mobart/data/no_file.png" ngf-src="writing[0]" />
+                    <img ng-show="writing[0] != null" ngf-default-src="/mobart/data/no_file.png" ngf-src="writing[0]" />
                     <img ng-show="{{ 
                             record.writingsamplefilepath.substr(record.writingsamplefilepath.length - 3) == 'jpg' || 
                             record.writingsamplefilepath.substr(record.writingsamplefilepath.length - 3) == 'png' }}" ng-hide="writing[0] != null" ng-src="{{ record.writingsamplefilepath ? '/mobart/data/files/' + record.writingsamplefilepath : '/mobart/data/no_file.png' }}" />
