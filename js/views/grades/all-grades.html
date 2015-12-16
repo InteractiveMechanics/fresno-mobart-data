@@ -28,6 +28,10 @@
                         <span ng-show="sortType == 'tid' && !sortReverse" class="glyphicon glyphicon-triangle-top"></span>
                         <span ng-show="sortType == 'tid' && sortReverse" class="glyphicon glyphicon-triangle-bottom"></span>
                     </th>
+                    <th ng-click="sortType = 'classname'; sortReverse = !sortReverse">School
+                        <span ng-show="sortType == 'classname' && !sortReverse" class="glyphicon glyphicon-triangle-top"></span>
+                        <span ng-show="sortType == 'classname' && sortReverse" class="glyphicon glyphicon-triangle-bottom"></span>
+                    </th>
                     <th>Artwork</th>
                     <th>Writing Sample</th>
                     <th ng-click="sortType = 'ex1grade'; sortReverse = !sortReverse">Dim. 1
@@ -51,6 +55,7 @@
             <tr dir-paginate="student in grades | filter:search | filter:{tid: sortUsers}:true | orderBy:sortType:sortReverse | itemsPerPage:15" current-page="currentPage" data-gid="{{ student.id }}">
                 <td class="student-name">{{ student.firstname + " " + student.lastname }}</td>
                 <td class="teacher-name" ng-bind="getNameFromTid(student.tid)"></td>
+                <td class="class-name">{{ student.classname }}</td>
                 <td class="artwork">
                     <div class="placeholder">
                         <a href="{{ student.artworkfilepath ? '/mobart/data/files/' + student.artworkfilepath : '#' }}" 
