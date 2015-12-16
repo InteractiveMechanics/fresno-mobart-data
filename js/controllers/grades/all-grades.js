@@ -20,12 +20,33 @@ mobart.controller('AllGradesController', function($scope, $modal, $http, $locati
         return str;
     }
 
-    $scope.uid = $rootScope.uid;
+    $scope.currentPage = 1;
+    $scope.uid = String($rootScope.uid);
     $scope.sortClasstype = '';
-    $scope.sortUsers = '';
+    $scope.sortUsers = String($rootScope.uid);
     $scope.sortType = 'cid';
     $scope.sortReverse = false;
 
+    $scope.getThumbnail = function(file) {
+        var image;
+        if (file){
+            var ext = file.split('.').pop();
+    
+            if (ext == 'jpg' || ext == 'png') {
+                image = '/mobart/data/files/' + file;
+            }
+            else if (ext == 'mov' || ext == 'mp4' || ext == 'webm') {
+                image = '/mobart/data/ic_video.png';
+            }
+            else {
+                image = '/mobart/data/no_file.png';
+            }
+        } else {
+            image = '/mobart/data/no_file.png';
+        }
+
+        return image;
+    };
     $scope.total = function (val1, val2, val3, val4) {
         return parseInt(val1) + parseInt(val2) + parseInt(val3);
     };

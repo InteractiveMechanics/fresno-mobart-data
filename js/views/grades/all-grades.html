@@ -7,15 +7,9 @@
                     <div class="form-inline">
                         <input ng-model="search.$" class="form-control" role="search" placeholder="Search students">
                         <div class="btn-group" role="group">
-                            <label class="btn btn-default active" ng-model="sortUsers" btn-radio="''">All Students</label>
-                            <label class="btn btn-default" ng-model="sortUsers" btn-radio="{{ uid }}">My Students</label>
+                            <label class="btn btn-default active" ng-model="sortUsers" btn-radio="">All Students</label>
+                            <label class="btn btn-default" ng-model="sortUsers" btn-radio="'{{ uid }}'">My Students</label>
                         </div><!-- end my student button-group -->
-        
-                        <div class="btn-group" role="group">
-                            <label class="btn btn-default active" ng-model="sortClasstype" btn-radio="''">All Classes</label>
-                            <label class="btn btn-default" ng-model="sortClasstype" btn-radio="'Visual Art'">Visual Art</label>
-                            <label class="btn btn-default" ng-model="sortClasstype" btn-radio="'Theatre'">Theatre</label>
-                        </div><!-- end classes button-group -->
                     </div>
                 </nav>
             </div>
@@ -54,36 +48,21 @@
                 </tr>
             </thead>
 
-            <tr ng-repeat="student in grades | orderBy:sortType:sortReverse | filter:search | filter:{tid: sortUsers} | filter:sortClasstype track by student.id" data-gid="{{ student.id }}">
+            <tr dir-paginate="student in grades | filter:search | filter:{tid: sortUsers}:true | orderBy:sortType:sortReverse | itemsPerPage:15" current-page="currentPage" data-gid="{{ student.id }}">
                 <td class="student-name">{{ student.firstname + " " + student.lastname }}</td>
                 <td class="teacher-name" ng-bind="getNameFromTid(student.tid)"></td>
                 <td class="artwork">
                     <div class="placeholder">
-                        <a href="{{ student.artworkfilepath ? '/mobart/data/files/' + student.artworkfilepath : '#' }}" target="{{ student.artworkfilepath ? '_blank' : '' }}">
-                            <img ng-show="{{ 
-                                student.artworkfilepath.substr(student.artworkfilepath.length - 3) == 'jpg' || 
-                                student.artworkfilepath.substr(student.artworkfilepath.length - 3) == 'png' }}" ng-src="{{ student.artworkfilepath ? '/mobart/data/files/' + student.artworkfilepath : '/mobart/data/no_file.png' }}" />
-                            <img ng-show="{{ 
-                                student.artworkfilepath.substr(student.artworkfilepath.length - 3) == 'mp4' || 
-                                student.artworkfilepath.substr(student.artworkfilepath.length - 3) == 'mov' }}" ng-src="/mobart/data/ic_video.png" />
-                            <img ng-hide="{{ 
-                                student.artworkfilepath.substr(student.artworkfilepath.length - 3) == 'jpg' || 
-                                student.artworkfilepath.substr(student.artworkfilepath.length - 3) == 'png' ||
-                                student.artworkfilepath.substr(student.artworkfilepath.length - 3) == 'mp4' || 
-                                student.artworkfilepath.substr(student.artworkfilepath.length - 3) == 'mov'
-                                " ng-src="/mobart/data/no_file.png" />
+                        <a href="{{ student.artworkfilepath ? '/mobart/data/files/' + student.artworkfilepath : '#' }}" 
+                           target="{{ student.artworkfilepath ? '_blank' : '' }}">
+                            <img ng-src="{{ getThumbnail(student.artworkfilepath) }}" />
                         </a>
                     </div>
                 </td>
                 <td class="writing-sample">
                     <div class="placeholder">
                         <a href="{{ student.writingsamplefilepath ? '/mobart/data/files/' + student.writingsamplefilepath : '#' }}" target="{{ student.writingsamplefilepath ? '_blank' : '' }}">
-                            <img ng-show="{{ 
-                                student.writingsamplefilepath.substr(student.writingsamplefilepath.length - 3) == 'jpg' || 
-                                student.writingsamplefilepath.substr(student.writingsamplefilepath.length - 3) == 'png' }}" ng-src="{{ student.writingsamplefilepath ? '/mobart/data/files/' + student.writingsamplefilepath : '/mobart/data/no_file.png' }}" />
-                            <img ng-hide="{{ 
-                                student.writingsamplefilepath.substr(student.writingsamplefilepath.length - 3) == 'jpg' || 
-                                student.writingsamplefilepath.substr(student.writingsamplefilepath.length - 3) == 'png' }}" ng-src="/mobart/data/no_file.png" />
+                            <img ng-src="{{ getThumbnail(student.writingsamplefilepath) }}" />
                         </a>
                     </div>
                 </td>
@@ -95,6 +74,10 @@
                 <td class="delete"><a ng-show="checkAdmins()" ng-click="deleteModal(student)"><span class="glyphicon glyphicon-trash"></span></a></td>
             </tr>
         </table>
+        <dir-pagination-controls
+            style="text-align: center;width: 100%;display: block;"
+            on-page-change="pageChangeHandler(newPageNumber)">
+        </dir-pagination-controls>
         <button class="btn btn-default" type="button" ng-csv="grades" csv-header="getHeader()" filename="MOBARTGradeTable.csv">Export as CSV</button>
     </div><!-- end table-responsive -->
 </div><!-- end container -->

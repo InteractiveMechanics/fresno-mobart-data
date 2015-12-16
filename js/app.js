@@ -1,4 +1,4 @@
-var mobart = angular.module('mobart', ['ngRoute', 'ngSanitize', 'appControllers', 'ngFileUpload', 'ui.bootstrap', 'ngCsv']);
+var mobart = angular.module('mobart', ['ngRoute', 'ngSanitize', 'appControllers', 'ngFileUpload', 'ui.bootstrap', 'ngCsv', 'angularUtils.directives.dirPagination']);
 var appControllers = angular.module('appControllers', []);
 
 mobart.run(function($rootScope, $location) {

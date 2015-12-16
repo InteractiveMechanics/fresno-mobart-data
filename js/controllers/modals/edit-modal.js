@@ -18,6 +18,27 @@ mobart.controller('EditModalController', function($scope, $http, $route, $rootSc
         $modalInstance.dismiss('cancel');
     }
 
+
+    $scope.getThumbnail = function(file) {
+        var image;
+        if (file){
+            var ext = file.split('.').pop();
+    
+            if (ext == 'jpg' || ext == 'png') {
+                image = '/mobart/data/files/' + file;
+            }
+            else if (ext == 'mov' || ext == 'mp4' || ext == 'webm') {
+                image = '/mobart/data/ic_video.png';
+            }
+            else {
+                image = '/mobart/data/no_file.png';
+            }
+        } else {
+            image = '/mobart/data/no_file.png';
+        }
+
+        return image;
+    };
     $scope.uploadArtwork = function (files) {
         if (files && files.length) {
             for (var i = 0; i < files.length; i++) {
