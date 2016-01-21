@@ -390,9 +390,12 @@
             SELECT 
                 id AS tid,
                 firstname,
-                lastname
+                lastname,
+                email
             FROM 
-                mdl_user';
+                mdl_user
+            WHERE
+                deleted = 0';
         try {
             $db     = getMoodleDB();
             $query  = $db->query($sql);
