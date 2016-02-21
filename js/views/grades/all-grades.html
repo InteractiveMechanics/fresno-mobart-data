@@ -2,20 +2,29 @@
     <header>
         <div class="row">
             <div class="col-sm-12">
-                <h1 class="pull-left">Grades</h1>
-                <nav class="pull-right">
+                <h1>Grades</h1>
+                <nav>
                     <div class="form-inline">
+	                    <!--<select class="form-control" ng-model="sortSemesters">
+                            <option value="">Filter by Semester</option>
+                            <option ng-repeat="s in semesters" value="{{ s.id }}">{{ s.semestername }}</option>
+                        </select>-->
                         <input ng-model="search.$" class="form-control" role="search" placeholder="Search students">
                         <div class="btn-group" role="group">
                             <label class="btn btn-default active" ng-model="sortUsers" btn-radio="">All Students</label>
                             <label class="btn btn-default" ng-model="sortUsers" btn-radio="'{{ uid }}'">My Students</label>
                         </div><!-- end my student button-group -->
+                        <select class="form-control" ng-model="sortProjects">
+                            <option value="">Filter by Project</option>
+                            <option ng-repeat="project in projects" value="{{ project.id }}">{{ project.name}}</option>
+                        </select>
                         <select class="form-control" ng-model="sortTeachers">
                             <option value="">Filter by Teacher</option>
                             <option ng-repeat="teacher in teachers" value="{{ teacher.tid }}">{{ teacher.firstname + " " + teacher.lastname }}</option>
                         </select>
                     </div>
                 </nav>
+                <br />
             </div>
         </div>
     </header>
@@ -24,11 +33,15 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th width="20%" ng-click="sortType = 'lastname'; sortReverse = !sortReverse">Student
+                    <th width="15%" ng-click="sortType = 'lastname'; sortReverse = !sortReverse">Student
                         <span ng-show="sortType == 'lastname' && !sortReverse" class="glyphicon glyphicon-triangle-top"></span>
                         <span ng-show="sortType == 'lastname' && sortReverse" class="glyphicon glyphicon-triangle-bottom"></span>
                     </th>
-                    <th width="20%" ng-click="sortType = 'tid'; sortReverse = !sortReverse">Teacher
+                    <th width="15%" ng-click="sortType = 'tid'; sortReverse = !sortReverse">Teacher
+                        <span ng-show="sortType == 'tid' && !sortReverse" class="glyphicon glyphicon-triangle-top"></span>
+                        <span ng-show="sortType == 'tid' && sortReverse" class="glyphicon glyphicon-triangle-bottom"></span>
+                    </th>
+                     <th width="10%" ng-click="sortType = 'tid'; sortReverse = !sortReverse">Project
                         <span ng-show="sortType == 'tid' && !sortReverse" class="glyphicon glyphicon-triangle-top"></span>
                         <span ng-show="sortType == 'tid' && sortReverse" class="glyphicon glyphicon-triangle-bottom"></span>
                     </th>
@@ -56,9 +69,10 @@
                 </tr>
             </thead>
 
-            <tr dir-paginate="student in grades | filter:search | filter:{tid: sortUsers}:true | filter:{tid: sortTeachers}:true | orderBy:sortType:sortReverse | itemsPerPage:15" current-page="currentPage" data-gid="{{ student.id }}">
+            <tr dir-paginate="student in grades | filter:search | filter:{pid: sortProjects}:true | filter:{tid: sortUsers}:true | filter:{tid: sortTeachers}:true | orderBy:sortType:sortReverse | itemsPerPage:15" current-page="currentPage" data-gid="{{ student.id }}">
                 <td class="student-name">{{ student.firstname + " " + student.lastname }}</td>
                 <td class="teacher-name" ng-bind="getNameFromTid(student.tid)"></td>
+                <td class="teacher-name" ng-bind="getProjectsById(student.pid)"></td>
                 <td class="class-name">{{ student.classname }}</td>
                 <td class="artwork">
                     <div class="placeholder">

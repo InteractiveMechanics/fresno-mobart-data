@@ -2,6 +2,7 @@ mobart.controller('AllGradesController', function($scope, $modal, $http, $locati
     $http
         .get($rootScope.baseUrl + '/api/grades')
         .success(function(response) {
+	        console.log(response);
             $scope.grades = response;
     });
     $http
@@ -9,6 +10,19 @@ mobart.controller('AllGradesController', function($scope, $modal, $http, $locati
         .success(function(response) {
             $scope.teachers = response;
     });
+    
+    $http
+        .get($rootScope.baseUrl + '/api/projects')
+        .success(function(response) {
+            $scope.projects = response;
+	});
+	
+	$http
+        .get($rootScope.baseUrl + '/api/semesters')
+        .success(function(response) {
+            $scope.semesters = response;
+            console.log(response);
+	});
 
     $scope.getNameFromTid = function (id) {
         var str = '';
@@ -18,6 +32,28 @@ mobart.controller('AllGradesController', function($scope, $modal, $http, $locati
             }
         });
         return str;
+    }
+    
+    $scope.getProjectsById = function(id) {
+	    
+	    var str = '';
+        angular.forEach($scope.projects, function(value, key) {
+           	if (id == value.id) {
+                str = value.name;
+            }
+        });
+        return str;
+        
+	    /*var response = $scope.projects;
+		console.log(response);
+        for (var item in response) {
+         	if (id == parseInt(response[item])) {
+	         	console.log(true);
+				return response[item].name
+			}
+		}
+		
+		return '';*/
     }
 
     $scope.currentPage = 1;

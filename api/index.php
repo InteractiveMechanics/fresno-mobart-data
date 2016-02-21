@@ -16,17 +16,22 @@
     $app->get('/classes/:cid/students', getStudentsFromClass);
     $app->get('/projects/', getProjects);
     $app->get('/projects/:pid', getProjectById);
+    $app->get('/semesters/', getSemesters);
+    $app->get('/semesters/:sid', getSemesterById);
     $app->get('/files/:fid', getFileById);
     $app->get('/teachers', getTeachersFromMoodle);
-
+	$app->get('/semester_class/:cid', getSemesterByClassId);
+	
     $app->post('/files', postFile);
     $app->post('/classes', postClass);
+    $app->post('/semester_class', postSemesterClass);
     $app->post('/classes/:cid/students', postStudent);
     $app->post('/grades', postGrade);
 
     $app->put('/grades/:gid', updateGrade);
     $app->put('/classes/:cid', updateClass);
     $app->put('/classes/:cid/students/:sid', updateStudent);
+    $app->put('/semester_class/:cid', updateSemesterClass);
 
     $app->delete('/grades/:gid', deleteGrade);
     $app->delete('/classes/:cid', deleteClass);
@@ -55,7 +60,8 @@
                 mobart_project_grade.writingid,
                 artwork.filename AS artworkfilepath,
                 artwork.mimetype AS artworkmimetype,
-                writingsample.filename AS writingsamplefilepath
+                writingsample.filename AS writingsamplefilepath,
+                semester.semid As semid
             FROM 
                 mobart_class, 
                 mobart_student, 
@@ -68,6 +74,11 @@
                 mobart_file writingsample
             ON
                 mobart_project_grade.writingid = writingsample.id
+            
+            LEFT JOIN 
+                mobart_semester_class semester
+            ON
+                mobart_project_grade.cid = semester.cid
             WHERE 
                 mobart_class.id = mobart_student.cid
             AND 
@@ -364,6 +375,66 @@
             echo json_encode($e->getMessage());
         }
     }
+    function getSemesters() {
+        $sql = '
+            SELECT
+                mobart_semester.id,
+                mobart_semester.semestername
+            FROM 
+                mobart_semester 
+            ORDER BY 
+                mobart_semester.id DESC';
+        try {
+            $db     = getDB();
+            $query  = $db->query($sql);
+            $tours  = $query->fetchAll(PDO::FETCH_OBJ);
+            $db     = null;
+    
+            echo json_encode($tours);
+        } catch(PDOException $e) {
+            echo json_encode($e->getMessage());
+        }
+    }
+    function getSemesterById($sid) {
+        $sql = '
+            SELECT * 
+            FROM 
+                mobart_semester 
+            WHERE 
+                mobart_semester.id = ' . $sid . ' 
+            ORDER BY 
+                mobart_semester.id DESC';
+        try {
+            $db     = getDB();
+            $query  = $db->query($sql);
+            $tour   = $query->fetchAll(PDO::FETCH_OBJ);
+            $db     = null;
+    
+            echo json_encode($tour);
+        } catch(PDOException $e) {
+            echo json_encode($e->getMessage());
+        }
+    }
+    function getSemesterByClassId($cid) {
+        $sql = '
+            SELECT * 
+            FROM 
+                mobart_semester_class 
+            WHERE 
+                mobart_semester_class.cid = ' . $cid . ' 
+            ORDER BY 
+                mobart_semester_class.cid DESC';
+        try {
+            $db     = getDB();
+            $query  = $db->query($sql);
+            $tour   = $query->fetchAll(PDO::FETCH_OBJ);
+            $db     = null;
+    
+            echo json_encode($tour);
+        } catch(PDOException $e) {
+            echo json_encode($e->getMessage());
+        }
+    }
     function getFileById($fid) {
         $sql = '
             SELECT 
@@ -453,12 +524,40 @@
             $stmt->bindParam('classtype', $vars['classtype']);
             $stmt->bindParam('tid', $vars['tid']);
             $stmt->execute();
+            
+            $result = $db->lastInsertId();
+            print_r($result); 
 
             $db = null;
         } catch(PDOException $e) {
             echo json_encode($e->getMessage()); 
         }
     }
+    function postSemesterClass() {
+        global $app;
+
+        $req    = json_decode($app->request->getBody());
+        $vars   = get_object_vars($req);
+     
+        $sql = '
+            INSERT INTO 
+                mobart_semester_class (`semid`, `cid`) 
+            VALUES 
+                (:semid, :cid)';
+        try {
+            $db = getDB();
+            $stmt = $db->prepare($sql);  
+            $stmt->bindParam('semid', $vars['semid']);
+            $stmt->bindParam('cid', $vars['cid']);
+            $stmt->execute();
+            
+            $db = null;
+        } catch(PDOException $e) {
+            echo json_encode($e->getMessage()); 
+        }
+        
+    }
+    
     function postStudent($cid) {
         global $app;
 
@@ -587,6 +686,7 @@
             echo json_encode($e->getMessage()); 
         }
     }
+    
     function updateStudent($cid, $sid) {
         global $app;
 
@@ -609,6 +709,33 @@
             $stmt->bindParam('cid', $cid);
             $stmt->bindParam('firstname', $vars['firstname']);
             $stmt->bindParam('lastname', $vars['lastname']);
+            $stmt->execute();
+
+            $db = null;
+        } catch(PDOException $e) {
+            echo json_encode($e->getMessage()); 
+        }
+    }
+    
+    function updateSemesterClass($cid) {
+        global $app;
+
+        $req    = json_decode($app->request->getBody());
+        $vars   = get_object_vars($req);
+     
+        $sql = '
+            UPDATE 
+                mobart_semester_class
+            SET 
+                cid = :cid, 
+                semid = :semid
+            WHERE 
+                cid = :cid';
+        try {
+            $db = getDB();
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam('cid', $vars['cid']);
+            $stmt->bindParam('semid', $vars['semid']);
             $stmt->execute();
 
             $db = null;

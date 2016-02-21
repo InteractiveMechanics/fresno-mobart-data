@@ -33,7 +33,7 @@
         </div><!-- end row -->
     
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <label>Class Type</label>
                 <select class="form-control" ng-model="classDetails[0].classtype">
                     <option value="Theatre">Theatre</option>
@@ -41,16 +41,24 @@
                 </select>
 
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <label>Teacher</label>
                 <select class="form-control" ng-model="classDetails[0].tid" ng-options="teacher.tid as teacher.firstname + ' ' + teacher.lastname for teacher in teachers"></select>
 
             </div>
-            <div class="col-sm-4">
+            
+            <div class="col-sm-3">
+                <label>Semester</label>
+                <select class="form-control" ng-model="selected_semester" ng-options="semester.id as semester.semestername for semester in semesters"></select>
+                
+            </div>
+            
+            <div class="col-sm-3">
                 <label>Project</label>
                 <select disabled class="form-control" ng-model="classDetails[0].pid" ng-options="project.id as project.name for project in projects"></select>
                 
-            </div><!-- end col-sm-10 col-sm-offset-1 -->
+            </div>
+            <!-- end col-sm-10 col-sm-offset-1 -->
         </div><!-- end row -->
     
         <div class="row" ng-show="editable">

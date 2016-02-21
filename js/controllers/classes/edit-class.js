@@ -15,6 +15,24 @@ mobart.controller('EditClassController', function($scope, $rootScope, $routePara
         .success(function(response) {
             $scope.teachers = response;
     });
+    
+    $http
+        .get($rootScope.baseUrl + '/api/semesters')
+        .success(function(response) {
+	        $scope.semesters = response;
+    });
+    
+    $http
+        .get($rootScope.baseUrl + '/api/semester_class/' + $routeParams.id)
+        .success(function(response) {
+	        console.log(response);
+            $scope.semester_id = response;
+            if($scope.semester_id.length > 0) {
+	            $scope.selected_semester = $scope.semester_id[0].semid;
+            }
+    });
+    
+    
     $http
         .get($rootScope.baseUrl + '/api/classes/' + $routeParams.id)
         .success(function(response) {
@@ -26,13 +44,39 @@ mobart.controller('EditClassController', function($scope, $rootScope, $routePara
         var promise = $http.put($rootScope.baseUrl + '/api/classes/' + $routeParams.id, $scope.classDetails[0]);
         promise.success(function(data, status, headers, config){
             if (status == 200){
-		        console.log("Class updated.");
-                $location.path('/classes');
+		        console.log("Class updated.");  
+		        var obj = {
+			      'cid': $routeParams.id,
+			      'semid': $scope.selected_semester
+		        };
+		        
+		        if($scope.semester_id.length > 0) {
+			        //If it exist then Update Query
+			        var promise = $http.put($rootScope.baseUrl + '/api/semester_class/' + $routeParams.id, obj);
+			        promise.success(function(data, status, headers, config){
+						if (status == 200){
+							$location.path('/classes');
+						}
+					});   
+	            } else {
+		            //Else Insert Query
+		            if($scope.selected_semester) {
+			            var promise = $http.post($rootScope.baseUrl + '/api/semester_class', obj);
+				        promise.success(function(data, status, headers, config){
+							if (status == 200){
+								$location.path('/classes');
+							}
+						});
+					} else {
+						$location.path('/classes');
+					}
+	            }
             } else {
 				console.log("Unable to update the class.");
             }
         });
     }
+    
     $scope.updateStudent = function (student) {
         var promise = $http.put($rootScope.baseUrl + '/api/classes/' + $routeParams.id + '/students/' + student.id, student);
         promise.success(function(data, status, headers, config){

@@ -10,13 +10,34 @@ mobart.controller('AddClassController', function($scope, $rootScope, $routeParam
         .success(function(response) {
             $scope.projects = response;
     });
+    
+    $http
+        .get($rootScope.baseUrl + '/api/semesters')
+        .success(function(response) {
+	        console.log(response);
+            $scope.semesters = response;
+    });
 
     $scope.saveClass = function() {
+	    //console.log($scope.selected_semester);
         var promise = $http.post($rootScope.baseUrl + '/api/classes', $scope.classDetails[0]);
         promise.success(function(data, status, headers, config){
             if (status == 200){
 		        console.log("Class created.");
-                $location.path('/classes');
+		        
+		        var obj = {
+			      'cid': data,
+			      'semid': $scope.selected_semester
+		        };
+		        
+		        var promise = $http.post($rootScope.baseUrl + '/api/semester_class', obj);
+		        promise.success(function(data, status, headers, config){
+					if (status == 200){
+						$location.path('/classes');
+					}
+				});
+		        //alert(data);
+                //$location.path('/classes');
             } else {
 				console.log("Unable to create the class.");
             }
