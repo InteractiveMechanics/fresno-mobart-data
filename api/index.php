@@ -22,6 +22,10 @@
     $app->get('/teachers', getTeachersFromMoodle);
 	$app->get('/semester_class/:cid', getSemesterByClassId);
 	
+	$app->get('/assessment1', getAssessment1);
+	$app->get('/assessment2', getAssessment2);
+	$app->get('/assessment3', getAssessment3);
+	
     $app->post('/files', postFile);
     $app->post('/classes', postClass);
     $app->post('/semester_class', postSemesterClass);
@@ -39,6 +43,21 @@
     $app->delete('/projects/:pid', deleteProject);
 
     $app->run();
+    
+    function getAssessment1() {
+	    $string = file_get_contents("http://iaccessfresno.com/mobart/src/resources/assessment1.json");	    
+	    print $string;
+    }
+    
+    function getAssessment2() {
+	    $string = file_get_contents("http://iaccessfresno.com/mobart/src/resources/assessment2.json");	    
+	    print $string;
+    }
+    
+    function getAssessment3() {
+	    $string = file_get_contents("http://iaccessfresno.com/mobart/src/resources/assessment3.json");	    
+	    print $string;
+    }
 
     function getGrades() {
         $sql = '
