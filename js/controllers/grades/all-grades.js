@@ -2,12 +2,22 @@ mobart.controller('AllGradesController', function($scope, $modal, $http, $locati
     $http
         .get($rootScope.baseUrl + '/api/grades')
         .success(function(response) {
-	        console.log(response);
             $scope.grades = response;
+    });
+    $http
+        .get($rootScope.baseUrl + '/api/export')
+        .success(function(response) {
+            $scope.exportRecords = response;
     });
     $http
         .get($rootScope.baseUrl + '/api/teachers')
         .success(function(response) {
+            response.splice(0, 2);
+            response.sort(function(a, b){
+                if(a.lastname < b.lastname) return -1;
+                if(a.lastname > b.lastname) return 1;
+                return 0;
+            });
             $scope.teachers = response;
     });
     
@@ -120,8 +130,8 @@ mobart.controller('AllGradesController', function($scope, $modal, $http, $locati
         });
     }
 
-    $scope.getArray = $scope.grades;
+    $scope.getArray = $scope.exportRecords;
     $scope.getHeader = function () {
-        return ["ID", "ClassID", "ClassName", "classType", "TeacherID", "StudentFirst", "StudentLast", "Incomplete?", "Grade1", "Grade2", "Grade3", "Grade4"]
+        return ["Grade ID", "Class Name", "Class Type", "Student First Name", "Student Last Name", "Incomplete?", "Grade 1", "Grade 2", "Grade 3", "Grade 4", "Artwork URL", "Artwork Filetype", "Writing Sample URL"]
     };
 });

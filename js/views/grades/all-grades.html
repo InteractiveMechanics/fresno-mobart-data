@@ -29,7 +29,7 @@
         </div>
     </header>
 
-    <div class="table-responsive">
+    <div class="table">
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -63,7 +63,10 @@
                         <span ng-show="sortType == 'ex3grade' && !sortReverse" class="glyphicon glyphicon-triangle-top"></span>
                         <span ng-show="sortType == 'ex3grade' && sortReverse" class="glyphicon glyphicon-triangle-bottom"></span>
                     </th>
-                    <th width="5%">Total</th>
+                    <th width="5%" ng-click="sortType = 'total|num'; sortReverse = !sortReverse">Total
+                        <span ng-show="sortType == 'total|num' && !sortReverse" class="glyphicon glyphicon-triangle-top"></span>
+                        <span ng-show="sortType == 'total|num' && sortReverse" class="glyphicon glyphicon-triangle-bottom"></span>
+                    </th>
                     <th width="5%"></th>
                     <th width="5%"></th>
                 </tr>
@@ -89,10 +92,10 @@
                         </a>
                     </div>
                 </td>
-                <td class="dimension">{{ student.incomplete == 1 ? 'I' : student.ex1grade }}</td>
-                <td class="dimension">{{ student.incomplete == 1 ? 'I' : student.ex2grade }}</td>
-                <td class="dimension">{{ student.incomplete == 1 ? 'I' : student.ex3grade }}</td>
-                <td class="total">{{ student.incomplete == 1 ? 'I' : total(student.ex1grade, student.ex2grade, student.ex3grade) }}</td>
+                <td class="dimension">{{ student.incomplete == 1 ? 'I' : (student.ex1grade | num) }}</td>
+                <td class="dimension">{{ student.incomplete == 1 ? 'I' : (student.ex2grade | num) }}</td>
+                <td class="dimension">{{ student.incomplete == 1 ? 'I' : (student.ex3grade | num) }}</td>
+                <td class="total">{{ student.incomplete == 1 ? 'I' : (student.total | num) }}</td>
                 <td class="edit"><a ng-show="checkAdmins() || $root.uid == student.tid" ng-click="editModal(student)"><span class="glyphicon glyphicon-pencil"></span></a></td>
                 <td class="delete"><a ng-show="checkAdmins()" ng-click="deleteModal(student)"><span class="glyphicon glyphicon-trash"></span></a></td>
             </tr>
@@ -101,6 +104,18 @@
             style="text-align: center;width: 100%;display: block;"
             on-page-change="pageChangeHandler(newPageNumber)">
         </dir-pagination-controls>
-        <button class="btn btn-default" type="button" ng-csv="grades" csv-header="getHeader()" filename="MOBARTGradeTable.csv">Export as CSV</button>
+        <div class="dropdown" dropdown>
+            <button class="btn btn-primary dropdown-toggle" type="button" dropdown-toggle>Download
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="#"><span class="glyphicon glyphicon-file"></span> Download All (CSV)</a></li>
+                <li><a href="#"><span class="glyphicon glyphicon-picture"></span> Download All (Images/Videos)</a></li>
+                <li class="divider"></li>
+                <li><a href="#"><span class="glyphicon glyphicon-file"></span> Download Selected (CSV)</a></li>
+                <li><a href="#"><span class="glyphicon glyphicon-picture"></span> Download Selected (Images/Videos)</a></li>
+            </ul>
+        </div>
+        <button class="btn btn-default hidden" type="button" ng-csv="exportRecords" csv-header="getHeader()" filename="MOBARTGradeTable.csv">Export as CSV</button>
     </div><!-- end table-responsive -->
 </div><!-- end container -->
