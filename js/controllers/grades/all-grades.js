@@ -1,4 +1,4 @@
-mobart.controller('AllGradesController', function($scope, $modal, $http, $location, $rootScope){
+mobart.controller('AllGradesController', function($scope, $modal, $http, $location, $rootScope, CSV){
     $http
         .get($rootScope.baseUrl + '/api/grades')
         .success(function(response) {
@@ -7,7 +7,8 @@ mobart.controller('AllGradesController', function($scope, $modal, $http, $locati
     $http
         .get($rootScope.baseUrl + '/api/export')
         .success(function(response) {
-            $scope.exportRecords = response;
+            $scope.exportFilterRecords = response;
+            $scope.exportCheckedRecords = response;
     });
     $http
         .get($rootScope.baseUrl + '/api/teachers')
@@ -20,18 +21,15 @@ mobart.controller('AllGradesController', function($scope, $modal, $http, $locati
             });
             $scope.teachers = response;
     });
-    
     $http
         .get($rootScope.baseUrl + '/api/projects')
         .success(function(response) {
             $scope.projects = response;
 	});
-	
 	$http
         .get($rootScope.baseUrl + '/api/semesters')
         .success(function(response) {
             $scope.semesters = response;
-            console.log(response);
 	});
 
     $scope.getNameFromTid = function (id) {
@@ -45,7 +43,6 @@ mobart.controller('AllGradesController', function($scope, $modal, $http, $locati
     }
     
     $scope.getProjectsById = function(id) {
-	    
 	    var str = '';
         angular.forEach($scope.projects, function(value, key) {
            	if (id == value.id) {
@@ -53,17 +50,6 @@ mobart.controller('AllGradesController', function($scope, $modal, $http, $locati
             }
         });
         return str;
-        
-	    /*var response = $scope.projects;
-		console.log(response);
-        for (var item in response) {
-         	if (id == parseInt(response[item])) {
-	         	console.log(true);
-				return response[item].name
-			}
-		}
-		
-		return '';*/
     }
 
     $scope.currentPage = 1;
@@ -72,7 +58,18 @@ mobart.controller('AllGradesController', function($scope, $modal, $http, $locati
     $scope.sortUsers = String($rootScope.uid);
     $scope.sortType = 'cid';
     $scope.sortReverse = false;
+    $scope.checkedGid = [];
 
+
+    $scope.toggleSelection = function(gid) {
+        var idx = $scope.checkedGid.indexOf(gid);
+        if (idx > -1) {
+            $scope.checkedGid.splice(idx, 1);
+        } else {
+            $scope.checkedGid.push(gid);
+        }
+        $scope.getCheckedExportRecords();
+    }
     $scope.getThumbnail = function(file) {
         var image;
         if (file){
@@ -96,6 +93,7 @@ mobart.controller('AllGradesController', function($scope, $modal, $http, $locati
     $scope.total = function (val1, val2, val3, val4) {
         return parseInt(val1) + parseInt(val2) + parseInt(val3);
     };
+
 
     $scope.editModal = function (_student) {
         var modalInstance = $modal.open({
@@ -129,9 +127,49 @@ mobart.controller('AllGradesController', function($scope, $modal, $http, $locati
             }
         });
     }
+    $scope.getFilteredExportRecords = function () {
+        var query = '?';
+        if ($scope.search) {
+            query += '&name=' + $scope.search;
+        }
+        if ($scope.sortTeachers) {
+            query += '&tid=' + $scope.sortTeachers;
+        }
+        if ($scope.sortProjects) {
+            query += '&pid=' + $scope.sortProjects;
+        }
 
-    $scope.getArray = $scope.exportRecords;
+        $http
+            .get($rootScope.baseUrl + '/api/export' + query)
+            .success(function(response) {
+                $scope.exportFilterRecords = response;
+        });
+    }
+    $scope.getCheckedExportRecords = function () {
+        var query = '?';
+        if ($scope.checkedGid) {
+            query += '&gid=';
+            angular.forEach($scope.checkedGid, function(value, key) {
+                query += value + ',';
+            });
+            query = query.slice(0, -1);
+        }
+
+        $http
+            .get($rootScope.baseUrl + '/api/export' + query)
+            .success(function(response) {
+                $scope.exportCheckedRecords = response;
+        });
+    }
+
+    $scope.downloadFilterFiles = function () {
+        
+    }
+    $scope.downloadCheckedFiles = function () {
+        
+    }
+
     $scope.getHeader = function () {
-        return ["Grade ID", "Class Name", "Class Type", "Student First Name", "Student Last Name", "Incomplete?", "Grade 1", "Grade 2", "Grade 3", "Grade 4", "Artwork URL", "Artwork Filetype", "Writing Sample URL"]
+        return ["Grade ID", "Class Name", "Class Type", "Student First Name", "Student Last Name", "Incomplete?", "Grade 1", "Grade 2", "Grade 3", "Grade 4", "Total", "Artwork URL", "Writing Sample URL"]
     };
 });

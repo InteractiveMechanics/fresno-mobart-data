@@ -47,17 +47,17 @@
     $app->run();
     
     function getAssessment1() {
-	    $string = file_get_contents("http://staging.iaccessfresno.com/mobart/src/resources/assessment1.json");	    
+	    $string = file_get_contents("../../src/resources/assessment1.json");	    
 	    print $string;
     }
     
     function getAssessment2() {
-	    $string = file_get_contents("http://staging.iaccessfresno.com/mobart/src/resources/assessment2.json");	    
+	    $string = file_get_contents("../../src/resources/assessment2.json");	    
 	    print $string;
     }
     
     function getAssessment3() {
-	    $string = file_get_contents("http://staging.iaccessfresno.com/mobart/src/resources/assessment3.json");	    
+	    $string = file_get_contents("../../src/resources/assessment3.json");	    
 	    print $string;
     }
 
@@ -110,10 +110,10 @@
         try {
             $db     = getDB();
             $query  = $db->query($sql);
-            $tours  = $query->fetchAll(PDO::FETCH_OBJ);
+            $result = $query->fetchAll(PDO::FETCH_OBJ);
             $db     = null;
     
-            echo json_encode($tours);
+            echo json_encode($result);
         } catch(PDOException $e) {
             echo json_encode($e->getMessage());
         }
@@ -164,10 +164,10 @@
         try {
             $db     = getDB();
             $query  = $db->query($sql);
-            $tours  = $query->fetchAll(PDO::FETCH_OBJ);
+            $result = $query->fetchAll(PDO::FETCH_OBJ);
             $db     = null;
     
-            echo json_encode($tours);
+            echo json_encode($result);
         } catch(PDOException $e) {
             echo json_encode($e->getMessage());
         }
@@ -218,10 +218,10 @@
         try {
             $db     = getDB();
             $query  = $db->query($sql);
-            $tours  = $query->fetchAll(PDO::FETCH_OBJ);
+            $result = $query->fetchAll(PDO::FETCH_OBJ);
             $db     = null;
     
-            echo json_encode($tours);
+            echo json_encode($result);
         } catch(PDOException $e) {
             echo json_encode($e->getMessage());
         }
@@ -272,10 +272,10 @@
         try {
             $db     = getDB();
             $query  = $db->query($sql);
-            $tour   = $query->fetchAll(PDO::FETCH_OBJ);
+            $result = $query->fetchAll(PDO::FETCH_OBJ);
             $db     = null;
     
-            echo json_encode($tour);
+            echo json_encode($result);
         } catch(PDOException $e) {
             echo json_encode($e->getMessage());
         }
@@ -295,10 +295,10 @@
         try {
             $db     = getDB();
             $query  = $db->query($sql);
-            $tours  = $query->fetchAll(PDO::FETCH_OBJ);
+            $result = $query->fetchAll(PDO::FETCH_OBJ);
             $db     = null;
     
-            echo json_encode($tours);
+            echo json_encode($result);
         } catch(PDOException $e) {
             echo json_encode($e->getMessage());
         }
@@ -322,10 +322,10 @@
         try {
             $db     = getDB();
             $query  = $db->query($sql);
-            $tours  = $query->fetchAll(PDO::FETCH_OBJ);
+            $result = $query->fetchAll(PDO::FETCH_OBJ);
             $db     = null;
     
-            echo json_encode($tours);
+            echo json_encode($result);
         } catch(PDOException $e) {
             echo json_encode($e->getMessage());
         }
@@ -349,10 +349,10 @@
         try {
             $db     = getDB();
             $query  = $db->query($sql);
-            $tour   = $query->fetchAll(PDO::FETCH_OBJ);
+            $result = $query->fetchAll(PDO::FETCH_OBJ);
             $db     = null;
     
-            echo json_encode($tour);
+            echo json_encode($result);
         } catch(PDOException $e) {
             echo json_encode($e->getMessage());
         }
@@ -369,10 +369,10 @@
         try {
             $db     = getDB();
             $query  = $db->query($sql);
-            $tours  = $query->fetchAll(PDO::FETCH_OBJ);
+            $result = $query->fetchAll(PDO::FETCH_OBJ);
             $db     = null;
     
-            echo json_encode($tours);
+            echo json_encode($result);
         } catch(PDOException $e) {
             echo json_encode($e->getMessage());
         }
@@ -392,10 +392,10 @@
         try {
             $db     = getDB();
             $query  = $db->query($sql);
-            $tour   = $query->fetchAll(PDO::FETCH_OBJ);
+            $result = $query->fetchAll(PDO::FETCH_OBJ);
             $db     = null;
     
-            echo json_encode($tour);
+            echo json_encode($result);
         } catch(PDOException $e) {
             echo json_encode($e->getMessage());
         }
@@ -412,10 +412,10 @@
         try {
             $db     = getDB();
             $query  = $db->query($sql);
-            $tours  = $query->fetchAll(PDO::FETCH_OBJ);
+            $result = $query->fetchAll(PDO::FETCH_OBJ);
             $db     = null;
     
-            echo json_encode($tours);
+            echo json_encode($result);
         } catch(PDOException $e) {
             echo json_encode($e->getMessage());
         }
@@ -432,10 +432,10 @@
         try {
             $db     = getDB();
             $query  = $db->query($sql);
-            $tour   = $query->fetchAll(PDO::FETCH_OBJ);
+            $result = $query->fetchAll(PDO::FETCH_OBJ);
             $db     = null;
     
-            echo json_encode($tour);
+            echo json_encode($result);
         } catch(PDOException $e) {
             echo json_encode($e->getMessage());
         }
@@ -452,10 +452,10 @@
         try {
             $db     = getDB();
             $query  = $db->query($sql);
-            $tour   = $query->fetchAll(PDO::FETCH_OBJ);
+            $result = $query->fetchAll(PDO::FETCH_OBJ);
             $db     = null;
     
-            echo json_encode($tour);
+            echo json_encode($result);
         } catch(PDOException $e) {
             echo json_encode($e->getMessage());
         }
@@ -473,10 +473,10 @@
         try {
             $db     = getDB();
             $query  = $db->query($sql);
-            $tour   = $query->fetchAll(PDO::FETCH_OBJ);
+            $result = $query->fetchAll(PDO::FETCH_OBJ);
             $db     = null;
     
-            echo json_encode($tour);
+            echo json_encode($result);
         } catch(PDOException $e) {
             echo json_encode($e->getMessage());
         }
@@ -495,15 +495,23 @@
         try {
             $db     = getMoodleDB();
             $query  = $db->query($sql);
-            $tour   = $query->fetchAll(PDO::FETCH_OBJ);
+            $result = $query->fetchAll(PDO::FETCH_OBJ);
             $db     = null;
     
-            echo json_encode($tour);
+            echo json_encode($result);
         } catch(PDOException $e) {
             echo json_encode($e->getMessage());
         }
     }
     function getExport() {
+        global $app;
+    
+        $req = $app->request();
+        $gid = $req->get('gid');
+        $tid = $req->get('tid');
+        $pid = $req->get('pid');
+        $name = $req->get('name');
+
         $sql = '
             SELECT
                 mobart_project_grade.id AS Project_ID,
@@ -517,9 +525,8 @@
                 mobart_project_grade.ex3grade AS Grade_03, 
                 mobart_project_grade.ex4grade AS Grade_04,
                 (mobart_project_grade.ex1grade + mobart_project_grade.ex2grade + mobart_project_grade.ex3grade) AS Total,
-                CONCAT("http://staging.iaccessfresno.com/mobart/data/files/",artwork.filename) AS Artwork_URL,
-                artwork.mimetype AS Artwork_Filetype,
-                CONCAT("http://staging.iaccessfresno.com/mobart/data/files/",writingsample.filename) AS Writing_Sample_URL
+                CONCAT("http://iaccessfresno.com/mobart/data/files/",artwork.filename) AS Artwork_URL,
+                CONCAT("http://iaccessfresno.com/mobart/data/files/",writingsample.filename) AS Writing_Sample_URL
             FROM 
                 mobart_class, 
                 mobart_student, 
@@ -538,7 +545,25 @@
             ON
                 mobart_project_grade.cid = semester.cid
             WHERE 
-                mobart_class.id = mobart_student.cid
+                mobart_class.id = mobart_student.cid';
+
+        if (!empty($gid)) {
+            $sql .= ' AND mobart_project_grade.id IN (' . $gid . ')';
+        }
+        if (!empty($tid)) {
+            $sql .= ' AND mobart_class.tid = ' . $tid;
+        }
+        if (!empty($pid)) {
+            $sql .= ' AND mobart_project_grade.pid = ' . $pid;
+        }
+        if (!empty($name)) {
+            $name = explode("%20", $name);
+            $name = implode('","', $name);
+            $sql .= ' AND (mobart_student.firstname IN ("' . $name . '")';
+            $sql .= ' OR mobart_student.lastname IN ("' . $name . '"))';
+        }
+
+        $sql .= '
             AND 
                 mobart_student.id = mobart_project_grade.sid 
             ORDER BY 
@@ -546,10 +571,10 @@
         try {
             $db     = getDB();
             $query  = $db->query($sql);
-            $tours  = $query->fetchAll(PDO::FETCH_OBJ);
+            $result = $query->fetchAll(PDO::FETCH_OBJ);
             $db     = null;
     
-            echo json_encode($tours);
+            echo json_encode($result);
         } catch(PDOException $e) {
             echo json_encode($e->getMessage());
         }
