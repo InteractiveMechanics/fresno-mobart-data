@@ -112,10 +112,10 @@
             </button>
             <ul class="dropdown-menu">
                 <li><a href="#" ng-csv="exportFilterRecords" csv-header="getHeader()" filename="MOBARTGradeTable.csv"><span class="glyphicon glyphicon-file"></span> Download All (CSV)</a></li>
-                <li><a href="#" ng-click="downloadFilterFiles"><span class="glyphicon glyphicon-picture"></span> Download All (Images/Videos)</a></li>
+                <li><a href="#" ng-click="downloadFilterFiles()"><span class="glyphicon glyphicon-picture"></span> Download All (Images/Videos)</a></li>
                 <li class="divider"></li>
                 <li><a href="#" ng-csv="exportCheckedRecords" csv-header="getHeader()" filename="MOBARTGradeTable.csv"><span class="glyphicon glyphicon-file"></span> Download Selected (CSV)</a></li>
-                <li><a href="#" ng-click="downloadCheckedFiles"><span class="glyphicon glyphicon-picture"></span> Download Selected (Images/Videos)</a></li>
+                <li><a href="#" ng-click="downloadCheckedFiles()"><span class="glyphicon glyphicon-picture"></span> Download Selected (Images/Videos)</a></li>
             </ul>
         </div>
         <button class="btn btn-default hidden" type="button">Export as CSV</button>

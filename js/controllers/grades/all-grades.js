@@ -163,10 +163,10 @@ mobart.controller('AllGradesController', function($scope, $modal, $http, $locati
     }
 
     $scope.downloadFilterFiles = function () {
-        
+        var promise = $http.post($rootScope.baseUrl + '/api/zipper.php', $scope.exportFilterRecords);
     }
     $scope.downloadCheckedFiles = function () {
-        
+        var promise = $http.post($rootScope.baseUrl + '/api/zipper.php', $scope.exportCheckedRecords);
     }
 
     $scope.getHeader = function () {
