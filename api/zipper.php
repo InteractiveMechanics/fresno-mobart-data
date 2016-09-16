@@ -17,13 +17,16 @@
 
     // if true, good; if false, zip creation failed
     $result = create_zip($files, 'archive.zip', true);
-    header('Content-Type: application/zip');
-    header('Content-disposition: attachment; filename=' . $result);
-    header('Content-Length: ' . filesize($result));
-    readfile($result);
+    if ($result){
+        header('Content-Type: application/octet-stream;');
+        header('Content-Disposition: attachment; filename=archive.zip');
+        header('Content-Length: ' . filesize('archive.zip'));
+        header('Pragma: no-cache'); 
+        header('Expires: 0'); 
+        readfile('archive.zip');
+    }
 
     function create_zip($files = array(), $destination = '', $overwrite = false) {
-        print_r($files);
 
     	if(file_exists($destination) && !$overwrite) { return false; }
     	$valid_files = array();
@@ -35,7 +38,6 @@
     			}
     		}
     	}
-        print_r($valid_files);
 
     	if(count($valid_files)) {
 

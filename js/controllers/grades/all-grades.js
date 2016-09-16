@@ -167,6 +167,42 @@ mobart.controller('AllGradesController', function($scope, $modal, $http, $locati
     }
     $scope.downloadCheckedFiles = function () {
         var promise = $http.post($rootScope.baseUrl + '/api/zipper.php', $scope.exportCheckedRecords);
+        promise.success(function(response){
+            var isFirefox = typeof InstallTrigger !== 'undefined';
+            var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+            var isIE = /*@cc_on!@*/false || !!document.documentMode;
+            var isEdge = !isIE && !!window.StyleMedia;
+            var isChrome = !!window.chrome && !!window.chrome.webstore;
+            var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+            var isBlink = (isChrome || isOpera) && !!window.CSS;
+
+            if(isFirefox || isIE || isChrome){
+                if(isChrome){
+                    var url = window.URL || window.webkitURL;
+                    var fileURL = $rootScope.baseUrl + '/api/archive.zip';
+                    var downloadLink = angular.element('<a></a>');//create a new  <a> tag element
+                    downloadLink.attr('href',fileURL);
+                    downloadLink.attr('download','archive.zip');
+                    downloadLink.attr('target','_self');
+                    downloadLink[0].click();//call click function
+                    url.revokeObjectURL(fileURL);//revoke the object from URL
+                }
+                if(isIE){
+                    window.navigator.msSaveOrOpenBlob($rootScope.baseUrl + '/api/archive.zip','archive.zip'); 
+                }
+                if(isFirefox){
+                    var url = window.URL || window.webkitURL;
+                    var fileURL = $rootScope.baseUrl + '/api/archive.zip';
+                    var a=elem[0];//recover the <a> tag from directive
+                    a.href=fileURL;
+                    a.download='archive.zip';
+                    a.target='_self';
+                    a.click();//we call click function
+                }
+
+
+            }
+        });
     }
 
     $scope.getHeader = function () {
