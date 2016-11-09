@@ -130,7 +130,7 @@ mobart.controller('AllGradesController', function($scope, $modal, $http, $locati
     $scope.getFilteredExportRecords = function () {
         var query = '?';
         if ($scope.search) {
-            query += '&name=' + $scope.search;
+            query += '&name=' + $scope.search.$;
         }
         if ($scope.sortTeachers) {
             query += '&tid=' + $scope.sortTeachers;
