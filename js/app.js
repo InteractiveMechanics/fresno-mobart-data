@@ -23,6 +23,11 @@ mobart.run(function($rootScope, $location) {
         }
     }
 });
+mobart.filter('num', function() {
+    return function(input) {
+      return parseInt(input, 10);
+    };
+});
 mobart.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
     $routeProvider
         .when('/', {
