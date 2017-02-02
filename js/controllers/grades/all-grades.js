@@ -132,6 +132,9 @@ mobart.controller('AllGradesController', function($scope, $modal, $http, $locati
         if ($scope.search) {
             query += '&name=' + $scope.search.$;
         }
+        if ($scope.sortSemesters) {
+            query += '&sid=' + $scope.sortSemesters;
+        }
         if ($scope.sortTeachers) {
             query += '&tid=' + $scope.sortTeachers;
         }
