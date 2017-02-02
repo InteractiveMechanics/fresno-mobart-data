@@ -510,6 +510,7 @@
         $gid = $req->get('gid');
         $tid = $req->get('tid');
         $pid = $req->get('pid');
+        $sid = $req->get('sid');
         $name = $req->get('name');
 
         $sql = '
@@ -526,7 +527,8 @@
                 mobart_project_grade.ex4grade AS Grade_04,
                 (mobart_project_grade.ex1grade + mobart_project_grade.ex2grade + mobart_project_grade.ex3grade) AS Total,
                 CONCAT("http://iaccessfresno.com/mobart/data/files/",artwork.filename) AS Artwork_URL,
-                CONCAT("http://iaccessfresno.com/mobart/data/files/",writingsample.filename) AS Writing_Sample_URL
+                CONCAT("http://iaccessfresno.com/mobart/data/files/",writingsample.filename) AS Writing_Sample_URL,
+                semester.semid As Semester
             FROM 
                 mobart_class, 
                 mobart_student, 
@@ -549,6 +551,9 @@
 
         if (!empty($gid)) {
             $sql .= ' AND mobart_project_grade.id IN (' . $gid . ')';
+        }
+        if (!empty($sid)) {
+            $sql .= ' AND mobart_semester_class.id IN (' . $gid . ')';
         }
         if (!empty($tid)) {
             $sql .= ' AND mobart_class.tid = ' . $tid;

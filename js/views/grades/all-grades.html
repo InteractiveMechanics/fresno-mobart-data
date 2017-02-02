@@ -5,10 +5,10 @@
                 <h1>Grades</h1>
                 <nav>
                     <div class="form-inline">
-	                    <!--<select class="form-control" ng-model="sortSemesters">
+	                    <select class="form-control" ng-model="sortSemesters" ng-change="getFilteredExportRecords()">
                             <option value="">Filter by Semester</option>
                             <option ng-repeat="s in semesters" value="{{ s.id }}">{{ s.semestername }}</option>
-                        </select>-->
+                        </select>
                         <input ng-model="search.$" ng-change="getFilteredExportRecords()" class="form-control" role="search" placeholder="Search students">
                         <div class="btn-group" role="group">
                             <label class="btn btn-default active" ng-model="sortUsers" ng-change="getFilteredExportRecords()" btn-radio="">All Students</label>
@@ -73,7 +73,7 @@
                 </tr>
             </thead>
 
-            <tr dir-paginate="student in grades | filter:search | filter:{pid: sortProjects}:true | filter:{tid: sortUsers}:true | filter:{tid: sortTeachers}:true | orderBy:sortType:sortReverse | itemsPerPage:15" current-page="currentPage" data-gid="{{ student.id }}">
+            <tr dir-paginate="student in grades | filter:search | filter:{pid: sortProjects}:true | filter:{semid: sortSemesters}:true | filter:{tid: sortUsers}:true | filter:{tid: sortTeachers}:true | orderBy:sortType:sortReverse | itemsPerPage:15" current-page="currentPage" data-gid="{{ student.id }}">
                 <td><input type="checkbox" name="selectedGid[]" value="{{ student.id }}" ng-checked="checkedGid.indexOf(student.id) > -1" ng-click="toggleSelection(student.id)" /></td>
                 <td class="student-name">{{ student.firstname + " " + student.lastname }}</td>
                 <td class="teacher-name" ng-bind="getNameFromTid(student.tid)"></td>
