@@ -17,6 +17,8 @@ mobart.run(function($rootScope, $location) {
             case 11:
             case 137:
             case 148:
+            case 240:
+            case 241:
                 return true;
                 break;
             default:
