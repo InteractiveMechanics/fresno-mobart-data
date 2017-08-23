@@ -537,6 +537,7 @@
                 mobart_file artwork
             ON
                 mobart_project_grade.artworkid = artwork.id
+
             LEFT JOIN 
                 mobart_file writingsample
             ON
@@ -546,14 +547,15 @@
                 mobart_semester_class semester
             ON
                 mobart_project_grade.cid = semester.cid
+
             WHERE 
                 mobart_class.id = mobart_student.cid';
 
         if (!empty($gid)) {
-            $sql .= ' AND mobart_project_grade.id IN (' . $gid . ')';
+            $sql .= ' AND mobart_project_grade.id = ' . $gid;
         }
         if (!empty($sid)) {
-            $sql .= ' AND mobart_semester_class.id IN (' . $gid . ')';
+            $sql .= ' AND semester.semid = ' . $sid;
         }
         if (!empty($tid)) {
             $sql .= ' AND mobart_class.tid = ' . $tid;
@@ -562,17 +564,14 @@
             $sql .= ' AND mobart_project_grade.pid = ' . $pid;
         }
         if (!empty($name)) {
-            $name = explode("%20", $name);
-            $name = implode('","', $name);
-            $sql .= ' AND (mobart_student.firstname IN ("' . $name . '")';
-            $sql .= ' OR mobart_student.lastname IN ("' . $name . '"))';
+            $names = explode("%20", $name);
+            foreach ($names as $n) {
+                $sql .= ' AND (mobart_student.firstname LIKE "%' . $n . '%"';
+                $sql .= ' OR mobart_student.lastname LIKE "%' . $n . '%")';
+            }
         }
 
-        $sql .= '
-            AND 
-                mobart_student.id = mobart_project_grade.sid 
-            ORDER BY 
-                mobart_class.id DESC';
+        $sql .= ' AND mobart_student.id = mobart_project_grade.sid ORDER BY mobart_class.id DESC';
         try {
             $db     = getDB();
             $query  = $db->query($sql);
