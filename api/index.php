@@ -78,6 +78,8 @@
                 mobart_project_grade.ex3grade, 
                 mobart_project_grade.ex4grade,
                 (mobart_project_grade.ex1grade + mobart_project_grade.ex2grade + mobart_project_grade.ex3grade) AS total,
+                mobart_project_grade.url,
+                mobart_project_grade.gradetype,
                 mobart_project_grade.artworkid,
                 mobart_project_grade.writingid,
                 artwork.filename AS artworkfilepath,
@@ -134,6 +136,8 @@
                 mobart_project_grade.ex3grade, 
                 mobart_project_grade.ex4grade,
                 (mobart_project_grade.ex1grade + mobart_project_grade.ex2grade + mobart_project_grade.ex3grade) AS total,
+                mobart_project_grade.url,
+                mobart_project_grade.gradetype,
                 mobart_project_grade.artworkid,
                 mobart_project_grade.writingid,
                 artwork.filename AS artworkfilepath,
@@ -188,6 +192,8 @@
                 mobart_project_grade.ex3grade, 
                 mobart_project_grade.ex4grade,
                 (mobart_project_grade.ex1grade + mobart_project_grade.ex2grade + mobart_project_grade.ex3grade) AS total,
+                mobart_project_grade.url,
+                mobart_project_grade.gradetype,
                 mobart_project_grade.artworkid,
                 mobart_project_grade.writingid,
                 artwork.filename AS artworkfilepath,
@@ -243,6 +249,8 @@
                 mobart_project_grade.ex3grade, 
                 mobart_project_grade.ex4grade,
                 (mobart_project_grade.ex1grade + mobart_project_grade.ex2grade + mobart_project_grade.ex3grade) AS total,
+                mobart_project_grade.url,
+                mobart_project_grade.gradetype,
                 mobart_project_grade.artworkid,
                 mobart_project_grade.writingid,
                 artwork.filename AS artworkfilepath,
@@ -517,7 +525,8 @@
             SELECT
                 mobart_project_grade.id AS Project_ID,
                 mobart_class.classname AS Class_Name, 
-                mobart_class.classtype AS Class_Type, 
+                mobart_class.classtype AS Class_Type,
+                mobart_project_grade.gradetype AS Grade_Level,
                 mobart_student.firstname AS Student_First_Name, 
                 mobart_student.lastname AS Student_Last_Name, 
                 mobart_project_grade.incomplete AS Incomplete,
@@ -526,6 +535,7 @@
                 mobart_project_grade.ex3grade AS Grade_03, 
                 mobart_project_grade.ex4grade AS Grade_04,
                 (mobart_project_grade.ex1grade + mobart_project_grade.ex2grade + mobart_project_grade.ex3grade) AS Total,
+                mobart_project_grade.url AS URL,
                 CONCAT("http://iaccessfresno.com/mobart/data/files/",artwork.filename) AS Artwork_URL,
                 CONCAT("http://iaccessfresno.com/mobart/data/files/",writingsample.filename) AS Writing_Sample_URL,
                 semester.semid As Semester
@@ -537,6 +547,7 @@
                 mobart_file artwork
             ON
                 mobart_project_grade.artworkid = artwork.id
+
             LEFT JOIN 
                 mobart_file writingsample
             ON
@@ -546,14 +557,15 @@
                 mobart_semester_class semester
             ON
                 mobart_project_grade.cid = semester.cid
+
             WHERE 
                 mobart_class.id = mobart_student.cid';
 
         if (!empty($gid)) {
-            $sql .= ' AND mobart_project_grade.id IN (' . $gid . ')';
+            $sql .= ' AND mobart_project_grade.id = ' . $gid;
         }
         if (!empty($sid)) {
-            $sql .= ' AND mobart_semester_class.id IN (' . $gid . ')';
+            $sql .= ' AND semester.semid = ' . $sid;
         }
         if (!empty($tid)) {
             $sql .= ' AND mobart_class.tid = ' . $tid;
@@ -562,17 +574,14 @@
             $sql .= ' AND mobart_project_grade.pid = ' . $pid;
         }
         if (!empty($name)) {
-            $name = explode("%20", $name);
-            $name = implode('","', $name);
-            $sql .= ' AND (mobart_student.firstname IN ("' . $name . '")';
-            $sql .= ' OR mobart_student.lastname IN ("' . $name . '"))';
+            $names = explode("%20", $name);
+            foreach ($names as $n) {
+                $sql .= ' AND (mobart_student.firstname LIKE "%' . $n . '%"';
+                $sql .= ' OR mobart_student.lastname LIKE "%' . $n . '%")';
+            }
         }
 
-        $sql .= '
-            AND 
-                mobart_student.id = mobart_project_grade.sid 
-            ORDER BY 
-                mobart_class.id DESC';
+        $sql .= ' AND mobart_student.id = mobart_project_grade.sid ORDER BY mobart_class.id DESC';
         try {
             $db     = getDB();
             $query  = $db->query($sql);
@@ -697,9 +706,9 @@
      
         $sql = '
             INSERT INTO 
-                mobart_project_grade (`cid`, `sid`, `incomplete`, `saved`, `artworkid`, `writingid`, `ex1grade`, `ex2grade`, `ex3grade`, `ex4grade`, `pid`) 
+                mobart_project_grade (`cid`, `sid`, `incomplete`, `saved`, `artworkid`, `writingid`, `ex1grade`, `ex2grade`, `ex3grade`, `ex4grade`, `pid`, `url`, `gradetype`) 
             VALUES 
-                (:cid, :sid, :incomplete, :saved, :artworkid, :writingid, :ex1grade, :ex2grade, :ex3grade, :ex4grade, :pid)';
+                (:cid, :sid, :incomplete, :saved, :artworkid, :writingid, :ex1grade, :ex2grade, :ex3grade, :ex4grade, :pid, :url, :gradetype)';
         try {
             $db = getDB();
             $stmt = $db->prepare($sql);  
@@ -714,6 +723,8 @@
             $stmt->bindParam('ex3grade', $vars['ex3grade']);
             $stmt->bindParam('ex4grade', $vars['ex4grade']);
             $stmt->bindParam('pid', $vars['pid']);
+            $stmt->bindParam('url', $vars['url']);
+            $stmt->bindParam('gradetype', $vars['gradetype']);
             $stmt->execute();
 
             $db = null;
@@ -740,7 +751,9 @@
                 ex3grade = :ex3grade, 
                 ex4grade = :ex4grade,
                 artworkid = :artworkid,
-                writingid = :writingid
+                writingid = :writingid,
+                url = :url,
+                gradetype = :gradetype
             WHERE 
                 id = :gid';
         try {
@@ -755,6 +768,8 @@
             $stmt->bindParam('ex4grade', $vars['ex4grade']);
             $stmt->bindParam('artworkid', $vars['artworkid']);
             $stmt->bindParam('writingid', $vars['writingid']);
+            $stmt->bindParam('url', $vars['url']);
+            $stmt->bindParam('gradetype', $vars['gradetype']);
             $stmt->execute();
 
             $db = null;
