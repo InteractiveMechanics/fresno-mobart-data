@@ -38,6 +38,10 @@
                         <span ng-show="sortType == 'lastname' && !sortReverse" class="glyphicon glyphicon-triangle-top"></span>
                         <span ng-show="sortType == 'lastname' && sortReverse" class="glyphicon glyphicon-triangle-bottom"></span>
                     </th>
+                    <th width="5%" ng-click="sortType = 'gradetype'; sortReverse = !sortReverse">Grade
+                        <span ng-show="sortType == 'lastname' && !sortReverse" class="glyphicon glyphicon-triangle-top"></span>
+                        <span ng-show="sortType == 'lastname' && sortReverse" class="glyphicon glyphicon-triangle-bottom"></span>
+                    </th>
                     <th width="10%" ng-click="sortType = 'tid'; sortReverse = !sortReverse">Teacher
                         <span ng-show="sortType == 'tid' && !sortReverse" class="glyphicon glyphicon-triangle-top"></span>
                         <span ng-show="sortType == 'tid' && sortReverse" class="glyphicon glyphicon-triangle-bottom"></span>
@@ -50,6 +54,7 @@
                         <span ng-show="sortType == 'classname' && !sortReverse" class="glyphicon glyphicon-triangle-top"></span>
                         <span ng-show="sortType == 'classname' && sortReverse" class="glyphicon glyphicon-triangle-bottom"></span>
                     </th>
+                    <th width="5%">URL</th>
                     <th width="5%">Artwork</th>
                     <th width="5%">Writing Sample</th>
                     <th width="5%" ng-click="sortType = 'ex1grade'; sortReverse = !sortReverse">Dim. 1
@@ -76,9 +81,11 @@
             <tr dir-paginate="student in grades | filter:search | filter:{pid: sortProjects}:true | filter:{semid: sortSemesters}:true | filter:{tid: sortUsers}:true | filter:{tid: sortTeachers}:true | orderBy:sortType:sortReverse | itemsPerPage:15" current-page="currentPage" data-gid="{{ student.id }}">
                 <td><input type="checkbox" name="selectedGid[]" value="{{ student.id }}" ng-checked="checkedGid.indexOf(student.id) > -1" ng-click="toggleSelection(student.id)" /></td>
                 <td class="student-name">{{ student.firstname + " " + student.lastname }}</td>
+                <td class="gradetype">{{ student.gradetype }}</td>
                 <td class="teacher-name" ng-bind="getNameFromTid(student.tid)"></td>
                 <td class="teacher-name" ng-bind="getProjectsById(student.pid)"></td>
                 <td class="class-name">{{ student.classname }}</td>
+                <td class="url"><a href="//{{ student.url }}" target="_blank" ng-if="student.url">View URL</a></td>
                 <td class="artwork">
                     <div class="placeholder">
                         <a href="{{ student.artworkfilepath ? '/mobart/data/files/' + student.artworkfilepath : '#' }}" 
